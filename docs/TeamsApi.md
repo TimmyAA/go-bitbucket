@@ -20,7 +20,7 @@ Method | HTTP request | Description
 
 
 # **TeamsGet**
-> PaginatedTeams TeamsGet(ctx, optional)
+> PaginatedTeams TeamsGet(ctx, role)
 
 
 Returns all the teams that the authenticated user is associated with.
@@ -30,14 +30,7 @@ Returns all the teams that the authenticated user is associated with.
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
- **optional** | ***TeamsGetOpts** | optional parameters | nil if no parameters
-
-### Optional Parameters
-Optional parameters are passed through a pointer to a TeamsGetOpts struct
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **role** | **optional.String**|  Filters the teams based on the authenticated user&#39;s role on each team.  * **member**: returns a list of all the teams which the caller is a member of   at least one team group or repository owned by the team * **contributor**: returns a list of teams which the caller has write access   to at least one repository owned by the team * **admin**: returns a list teams which the caller has team administrator access  | 
+  **role** | **string**|  Filters the teams based on the authenticated user&#39;s role on each team.  * **member**: returns a list of all the teams which the caller is a member of   at least one team group or repository owned by the team * **contributor**: returns a list of teams which the caller has write access   to at least one repository owned by the team * **admin**: returns a list teams which the caller has team administrator access  | 
 
 ### Return type
 

@@ -17,7 +17,6 @@ import (
 	"net/url"
 	"strings"
 	"fmt"
-	"github.com/antihax/optional"
 )
 
 // Linger please
@@ -918,19 +917,12 @@ Returns the list of all changes that have been made to the specified issue. Chan
  * @param username This can either be the username or the UUID of the account, surrounded by curly-braces, for example: &#x60;{account UUID}&#x60;. An account is either a team or user. 
  * @param issueId The issue id
  * @param repoSlug This can either be the repository slug or the UUID of the repository, surrounded by curly-braces, for example: &#x60;{repository UUID}&#x60;. 
- * @param optional nil or *RepositoriesUsernameRepoSlugIssuesIssueIdChangesGetOpts - Optional Parameters:
-     * @param "Q" (optional.String) -   Query string to narrow down the response. See [filtering and sorting](../../../meta/filtering) for details.
-     * @param "Sort" (optional.String) -   Name of a response property to sort results. See [filtering and sorting](../../../meta/filtering#query-sort) for details. 
+ * @param q  Query string to narrow down the response. See [filtering and sorting](../../../meta/filtering) for details.
+ * @param sort  Name of a response property to sort results. See [filtering and sorting](../../../meta/filtering#query-sort) for details. 
 
 @return PaginatedLogEntries
 */
-
-type RepositoriesUsernameRepoSlugIssuesIssueIdChangesGetOpts struct { 
-	Q optional.String
-	Sort optional.String
-}
-
-func (a *IssueTrackerApiService) RepositoriesUsernameRepoSlugIssuesIssueIdChangesGet(ctx context.Context, username string, issueId string, repoSlug string, localVarOptionals *RepositoriesUsernameRepoSlugIssuesIssueIdChangesGetOpts) (PaginatedLogEntries, *http.Response, error) {
+func (a *IssueTrackerApiService) RepositoriesUsernameRepoSlugIssuesIssueIdChangesGet(ctx context.Context, username string, issueId string, repoSlug string, q string, sort string) (PaginatedLogEntries, *http.Response, error) {
 	var (
 		localVarHttpMethod = strings.ToUpper("Get")
 		localVarPostBody   interface{}
@@ -949,12 +941,8 @@ func (a *IssueTrackerApiService) RepositoriesUsernameRepoSlugIssuesIssueIdChange
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
-	if localVarOptionals != nil && localVarOptionals.Q.IsSet() {
-		localVarQueryParams.Add("q", parameterToString(localVarOptionals.Q.Value(), ""))
-	}
-	if localVarOptionals != nil && localVarOptionals.Sort.IsSet() {
-		localVarQueryParams.Add("sort", parameterToString(localVarOptionals.Sort.Value(), ""))
-	}
+	localVarQueryParams.Add("q", parameterToString(q, ""))
+	localVarQueryParams.Add("sort", parameterToString(sort, ""))
 	// to determine the Content-Type header
 	localVarHttpContentTypes := []string{"application/json"}
 
@@ -1515,17 +1503,11 @@ Returns a paginated list of all comments that were made on the specified issue. 
  * @param issueId
  * @param username This can either be the username or the UUID of the user, surrounded by curly-braces, for example: &#x60;{user UUID}&#x60;. 
  * @param repoSlug This can either be the repository slug or the UUID of the repository, surrounded by curly-braces, for example: &#x60;{repository UUID}&#x60;. 
- * @param optional nil or *RepositoriesUsernameRepoSlugIssuesIssueIdCommentsGetOpts - Optional Parameters:
-     * @param "Q" (optional.String) -   Query string to narrow down the response as per [filtering and sorting](../../../../../../meta/filtering).
+ * @param q  Query string to narrow down the response as per [filtering and sorting](../../../../../../meta/filtering).
 
 @return PaginatedIssueComments
 */
-
-type RepositoriesUsernameRepoSlugIssuesIssueIdCommentsGetOpts struct { 
-	Q optional.String
-}
-
-func (a *IssueTrackerApiService) RepositoriesUsernameRepoSlugIssuesIssueIdCommentsGet(ctx context.Context, issueId string, username string, repoSlug string, localVarOptionals *RepositoriesUsernameRepoSlugIssuesIssueIdCommentsGetOpts) (PaginatedIssueComments, *http.Response, error) {
+func (a *IssueTrackerApiService) RepositoriesUsernameRepoSlugIssuesIssueIdCommentsGet(ctx context.Context, issueId string, username string, repoSlug string, q string) (PaginatedIssueComments, *http.Response, error) {
 	var (
 		localVarHttpMethod = strings.ToUpper("Get")
 		localVarPostBody   interface{}
@@ -1544,9 +1526,7 @@ func (a *IssueTrackerApiService) RepositoriesUsernameRepoSlugIssuesIssueIdCommen
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
-	if localVarOptionals != nil && localVarOptionals.Q.IsSet() {
-		localVarQueryParams.Add("q", parameterToString(localVarOptionals.Q.Value(), ""))
-	}
+	localVarQueryParams.Add("q", parameterToString(q, ""))
 	// to determine the Content-Type header
 	localVarHttpContentTypes := []string{"application/json"}
 

@@ -76,7 +76,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **CreatePipelineVariableForTeam**
-> PipelineVariable CreatePipelineVariableForTeam(ctx, username, optional)
+> PipelineVariable CreatePipelineVariableForTeam(ctx, username, body)
 
 
 Create an account level variable.
@@ -87,15 +87,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
   **username** | **string**| The account. | 
- **optional** | ***CreatePipelineVariableForTeamOpts** | optional parameters | nil if no parameters
-
-### Optional Parameters
-Optional parameters are passed through a pointer to a CreatePipelineVariableForTeamOpts struct
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
-
- **body** | [**optional.Interface of PipelineVariable**](PipelineVariable.md)| The variable to create. | 
+  **body** | [**PipelineVariable**](PipelineVariable.md)| The variable to create. | 
 
 ### Return type
 
@@ -113,7 +105,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **CreatePipelineVariableForUser**
-> PipelineVariable CreatePipelineVariableForUser(ctx, username, optional)
+> PipelineVariable CreatePipelineVariableForUser(ctx, username, body)
 
 
 Create a user level variable.
@@ -124,15 +116,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
   **username** | **string**| The account. | 
- **optional** | ***CreatePipelineVariableForUserOpts** | optional parameters | nil if no parameters
-
-### Optional Parameters
-Optional parameters are passed through a pointer to a CreatePipelineVariableForUserOpts struct
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
-
- **body** | [**optional.Interface of PipelineVariable**](PipelineVariable.md)| The variable to create. | 
+  **body** | [**PipelineVariable**](PipelineVariable.md)| The variable to create. | 
 
 ### Return type
 

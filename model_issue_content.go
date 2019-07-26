@@ -10,8 +10,11 @@
 
 package bitbucket
 
-type PullrequestRendered struct {
-	Title *IssueContent `json:"title,omitempty"`
-	Description *IssueContent `json:"description,omitempty"`
-	Reason *IssueContent `json:"reason,omitempty"`
+type IssueContent struct {
+	// The text as it was typed by a user.
+	Raw string `json:"raw,omitempty"`
+	// The type of markup language the raw content is to be interpreted in.
+	Markup string `json:"markup,omitempty"`
+	// The user's content rendered as HTML.
+	Html string `json:"html,omitempty"`
 }

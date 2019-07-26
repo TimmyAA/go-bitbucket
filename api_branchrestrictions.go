@@ -17,7 +17,6 @@ import (
 	"net/url"
 	"strings"
 	"fmt"
-	"github.com/antihax/optional"
 )
 
 // Linger please
@@ -33,19 +32,12 @@ Returns a paginated list of all branch restrictions on the repository.
  * @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param username This can either be the username or the UUID of the account, surrounded by curly-braces, for example: &#x60;{account UUID}&#x60;. An account is either a team or user. 
  * @param repoSlug This can either be the repository slug or the UUID of the repository, surrounded by curly-braces, for example: &#x60;{repository UUID}&#x60;. 
- * @param optional nil or *RepositoriesUsernameRepoSlugBranchRestrictionsGetOpts - Optional Parameters:
-     * @param "Kind" (optional.String) -  Branch restrictions of this type
-     * @param "Pattern" (optional.String) -  Branch restrictions applied to branches of this pattern
+ * @param kind Branch restrictions of this type
+ * @param pattern Branch restrictions applied to branches of this pattern
 
 @return PaginatedBranchrestrictions
 */
-
-type RepositoriesUsernameRepoSlugBranchRestrictionsGetOpts struct { 
-	Kind optional.String
-	Pattern optional.String
-}
-
-func (a *BranchrestrictionsApiService) RepositoriesUsernameRepoSlugBranchRestrictionsGet(ctx context.Context, username string, repoSlug string, localVarOptionals *RepositoriesUsernameRepoSlugBranchRestrictionsGetOpts) (PaginatedBranchrestrictions, *http.Response, error) {
+func (a *BranchrestrictionsApiService) RepositoriesUsernameRepoSlugBranchRestrictionsGet(ctx context.Context, username string, repoSlug string, kind string, pattern string) (PaginatedBranchrestrictions, *http.Response, error) {
 	var (
 		localVarHttpMethod = strings.ToUpper("Get")
 		localVarPostBody   interface{}
@@ -63,12 +55,8 @@ func (a *BranchrestrictionsApiService) RepositoriesUsernameRepoSlugBranchRestric
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
-	if localVarOptionals != nil && localVarOptionals.Kind.IsSet() {
-		localVarQueryParams.Add("kind", parameterToString(localVarOptionals.Kind.Value(), ""))
-	}
-	if localVarOptionals != nil && localVarOptionals.Pattern.IsSet() {
-		localVarQueryParams.Add("pattern", parameterToString(localVarOptionals.Pattern.Value(), ""))
-	}
+	localVarQueryParams.Add("kind", parameterToString(kind, ""))
+	localVarQueryParams.Add("pattern", parameterToString(pattern, ""))
 	// to determine the Content-Type header
 	localVarHttpContentTypes := []string{"application/json"}
 

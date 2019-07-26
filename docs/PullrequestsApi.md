@@ -33,7 +33,7 @@ Method | HTTP request | Description
 
 
 # **GetPullrequestsForCommit**
-> PaginatedPullrequests GetPullrequestsForCommit(ctx, username, repoSlug, commit, optional)
+> PaginatedPullrequests GetPullrequestsForCommit(ctx, username, repoSlug, commit, page, pagelen)
 Returns a paginated list of all pull requests as part of which this commit was reviewed.
 
 ### Required Parameters
@@ -44,18 +44,8 @@ Name | Type | Description  | Notes
   **username** | **string**| The account; either the UUID in curly braces, or the account_id | 
   **repoSlug** | **string**| The repository; either the UUID in curly braces, or the slug | 
   **commit** | **string**| The SHA1 of the commit | 
- **optional** | ***GetPullrequestsForCommitOpts** | optional parameters | nil if no parameters
-
-### Optional Parameters
-Optional parameters are passed through a pointer to a GetPullrequestsForCommitOpts struct
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
-
-
-
- **page** | **optional.Int32**| Which page to retrieve | [default to 1]
- **pagelen** | **optional.Int32**| How many pull requests to retrieve per page | [default to 30]
+  **page** | **int32**| Which page to retrieve | [default to 1]
+  **pagelen** | **int32**| How many pull requests to retrieve per page | [default to 30]
 
 ### Return type
 
@@ -300,7 +290,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **RepositoriesUsernameRepoSlugPullrequestsPost**
-> Pullrequest RepositoriesUsernameRepoSlugPullrequestsPost(ctx, username, repoSlug, optional)
+> Pullrequest RepositoriesUsernameRepoSlugPullrequestsPost(ctx, username, repoSlug, body)
 
 
 Creates a new pull request where the destination repository is this repository and the author is the authenticated user.  The minimum required fields to create a pull request are `title` and `source`, specified by a branch name.  ``` curl https://api.bitbucket.org/2.0/repositories/my-username/my-repository/pullrequests \\     -u my-username:my-password \\     --request POST \\     --header 'Content-Type: application/json' \\     --data '{         \"title\": \"My Title\",         \"source\": {             \"branch\": {                 \"name\": \"staging\"             }         }     }' ```  If the pull request's `destination` is not specified, it will default to the `repository.mainbranch`. To open a pull request to a different branch, say from a feature branch to a staging branch, specify a `destination` (same format as the `source`):  ``` {     \"title\": \"My Title\",     \"source\": {         \"branch\": {             \"name\": \"my-feature-branch\"         }     },     \"destination\": {         \"branch\": {             \"name\": \"staging\"         }     } } ```  Reviewers can be specified by adding an array of user objects as the `reviewers` property.  ``` {     \"title\": \"My Title\",     \"source\": {         \"branch\": {             \"name\": \"my-feature-branch\"         }     },     \"reviewers\": [         {             \"uuid\": \"{504c3b62-8120-4f0c-a7bc-87800b9d6f70}\"         }     ] } ```  Other fields:  * `description` - a string * `close_source_branch` - boolean that specifies if the source branch should be closed upon merging
@@ -312,16 +302,7 @@ Name | Type | Description  | Notes
  **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
   **username** | **string**| This can either be the username or the UUID of the account, surrounded by curly-braces, for example: &#x60;{account UUID}&#x60;. An account is either a team or user.  | 
   **repoSlug** | **string**| This can either be the repository slug or the UUID of the repository, surrounded by curly-braces, for example: &#x60;{repository UUID}&#x60;.  | 
- **optional** | ***RepositoriesUsernameRepoSlugPullrequestsPostOpts** | optional parameters | nil if no parameters
-
-### Optional Parameters
-Optional parameters are passed through a pointer to a RepositoriesUsernameRepoSlugPullrequestsPostOpts struct
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
-
-
- **body** | [**optional.Interface of Pullrequest**](Pullrequest.md)| The new pull request.  The request URL you POST to becomes the destination repository URL. For this reason, you must specify an explicit source repository in the request object if you want to pull from a different repository (fork).  Since not all elements are required or even mutable, you only need to include the elements you want to initialize, such as the source branch and the title. | 
+  **body** | [**Pullrequest**](Pullrequest.md)| The new pull request.  The request URL you POST to becomes the destination repository URL. For this reason, you must specify an explicit source repository in the request object if you want to pull from a different repository (fork).  Since not all elements are required or even mutable, you only need to include the elements you want to initialize, such as the source branch and the title. | 
 
 ### Return type
 
@@ -734,7 +715,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **RepositoriesUsernameRepoSlugPullrequestsPullRequestIdMergePost**
-> Pullrequest RepositoriesUsernameRepoSlugPullrequestsPullRequestIdMergePost(ctx, username, pullRequestId, repoSlug, optional)
+> Pullrequest RepositoriesUsernameRepoSlugPullrequestsPullRequestIdMergePost(ctx, username, pullRequestId, repoSlug, body)
 
 
 Merges the pull request.
@@ -747,17 +728,7 @@ Name | Type | Description  | Notes
   **username** | **string**|  | 
   **pullRequestId** | **string**|  | 
   **repoSlug** | **string**|  | 
- **optional** | ***RepositoriesUsernameRepoSlugPullrequestsPullRequestIdMergePostOpts** | optional parameters | nil if no parameters
-
-### Optional Parameters
-Optional parameters are passed through a pointer to a RepositoriesUsernameRepoSlugPullrequestsPullRequestIdMergePostOpts struct
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
-
-
-
- **body** | [**optional.Interface of PullrequestMergeParameters**](PullrequestMergeParameters.md)|  | 
+  **body** | [**PullrequestMergeParameters**](PullrequestMergeParameters.md)|  | 
 
 ### Return type
 
@@ -805,7 +776,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **RepositoriesUsernameRepoSlugPullrequestsPullRequestIdPut**
-> Pullrequest RepositoriesUsernameRepoSlugPullrequestsPullRequestIdPut(ctx, username, repoSlug, pullRequestId, optional)
+> Pullrequest RepositoriesUsernameRepoSlugPullrequestsPullRequestIdPut(ctx, username, repoSlug, pullRequestId, body)
 
 
 Mutates the specified pull request.  This can be used to change the pull request's branches or description.  Only open pull requests can be mutated.
@@ -818,17 +789,7 @@ Name | Type | Description  | Notes
   **username** | **string**| This can either be the username or the UUID of the account, surrounded by curly-braces, for example: &#x60;{account UUID}&#x60;. An account is either a team or user.  | 
   **repoSlug** | **string**| This can either be the repository slug or the UUID of the repository, surrounded by curly-braces, for example: &#x60;{repository UUID}&#x60;.  | 
   **pullRequestId** | **int32**| The id of the pull request. | 
- **optional** | ***RepositoriesUsernameRepoSlugPullrequestsPullRequestIdPutOpts** | optional parameters | nil if no parameters
-
-### Optional Parameters
-Optional parameters are passed through a pointer to a RepositoriesUsernameRepoSlugPullrequestsPullRequestIdPutOpts struct
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
-
-
-
- **body** | [**optional.Interface of Pullrequest**](Pullrequest.md)| The pull request that is to be updated. | 
+  **body** | [**Pullrequest**](Pullrequest.md)| The pull request that is to be updated. | 
 
 ### Return type
 

@@ -9,7 +9,7 @@ Method | HTTP request | Description
 
 
 # **SearchAccount**
-> SearchResultPage SearchAccount(ctx, username, searchQuery, optional)
+> SearchResultPage SearchAccount(ctx, username, searchQuery, page, pagelen)
 Search for code in the repositories of the specified team
 
 ### Required Parameters
@@ -19,17 +19,8 @@ Name | Type | Description  | Notes
  **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
   **username** | **string**| The account to search in; either the username or the UUID in curly braces | 
   **searchQuery** | **string**| The search query | 
- **optional** | ***SearchAccountOpts** | optional parameters | nil if no parameters
-
-### Optional Parameters
-Optional parameters are passed through a pointer to a SearchAccountOpts struct
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
-
-
- **page** | **optional.Int32**| Which page of the search results to retrieve | [default to 1]
- **pagelen** | **optional.Int32**| How many search results to retrieve per page | [default to 10]
+  **page** | **int32**| Which page of the search results to retrieve | [default to 1]
+  **pagelen** | **int32**| How many search results to retrieve per page | [default to 10]
 
 ### Return type
 
@@ -47,7 +38,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **SearchAccount_0**
-> SearchResultPage SearchAccount_0(ctx, username, searchQuery, optional)
+> SearchResultPage SearchAccount_0(ctx, username, searchQuery, page, pagelen)
 Search for code in the repositories of the specified user
 
 ### Required Parameters
@@ -57,17 +48,8 @@ Name | Type | Description  | Notes
  **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
   **username** | **string**| The account to search in; either the username or the UUID in curly braces | 
   **searchQuery** | **string**| The search query | 
- **optional** | ***SearchAccount_1Opts** | optional parameters | nil if no parameters
-
-### Optional Parameters
-Optional parameters are passed through a pointer to a SearchAccount_1Opts struct
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
-
-
- **page** | **optional.Int32**| Which page of the search results to retrieve | [default to 1]
- **pagelen** | **optional.Int32**| How many search results to retrieve per page | [default to 10]
+  **page** | **int32**| Which page of the search results to retrieve | [default to 1]
+  **pagelen** | **int32**| How many search results to retrieve per page | [default to 10]
 
 ### Return type
 

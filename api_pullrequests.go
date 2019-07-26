@@ -33,19 +33,12 @@ PullrequestsApiService Returns a paginated list of all pull requests as part of 
  * @param username The account; either the UUID in curly braces, or the account_id
  * @param repoSlug The repository; either the UUID in curly braces, or the slug
  * @param commit The SHA1 of the commit
- * @param optional nil or *GetPullrequestsForCommitOpts - Optional Parameters:
-     * @param "Page" (optional.Int32) -  Which page to retrieve
-     * @param "Pagelen" (optional.Int32) -  How many pull requests to retrieve per page
+ * @param page Which page to retrieve
+ * @param pagelen How many pull requests to retrieve per page
 
 @return PaginatedPullrequests
 */
-
-type GetPullrequestsForCommitOpts struct { 
-	Page optional.Int32
-	Pagelen optional.Int32
-}
-
-func (a *PullrequestsApiService) GetPullrequestsForCommit(ctx context.Context, username string, repoSlug string, commit string, localVarOptionals *GetPullrequestsForCommitOpts) (PaginatedPullrequests, *http.Response, error) {
+func (a *PullrequestsApiService) GetPullrequestsForCommit(ctx context.Context, username string, repoSlug string, commit string, page int32, pagelen int32) (PaginatedPullrequests, *http.Response, error) {
 	var (
 		localVarHttpMethod = strings.ToUpper("Get")
 		localVarPostBody   interface{}
@@ -64,12 +57,8 @@ func (a *PullrequestsApiService) GetPullrequestsForCommit(ctx context.Context, u
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
-	if localVarOptionals != nil && localVarOptionals.Page.IsSet() {
-		localVarQueryParams.Add("page", parameterToString(localVarOptionals.Page.Value(), ""))
-	}
-	if localVarOptionals != nil && localVarOptionals.Pagelen.IsSet() {
-		localVarQueryParams.Add("pagelen", parameterToString(localVarOptionals.Pagelen.Value(), ""))
-	}
+	localVarQueryParams.Add("page", parameterToString(page, ""))
+	localVarQueryParams.Add("pagelen", parameterToString(pagelen, ""))
 	// to determine the Content-Type header
 	localVarHttpContentTypes := []string{"application/json"}
 
@@ -915,17 +904,11 @@ Creates a new pull request where the destination repository is this repository a
  * @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param username This can either be the username or the UUID of the account, surrounded by curly-braces, for example: &#x60;{account UUID}&#x60;. An account is either a team or user. 
  * @param repoSlug This can either be the repository slug or the UUID of the repository, surrounded by curly-braces, for example: &#x60;{repository UUID}&#x60;. 
- * @param optional nil or *RepositoriesUsernameRepoSlugPullrequestsPostOpts - Optional Parameters:
-     * @param "Body" (optional.Interface of Pullrequest) -  The new pull request.  The request URL you POST to becomes the destination repository URL. For this reason, you must specify an explicit source repository in the request object if you want to pull from a different repository (fork).  Since not all elements are required or even mutable, you only need to include the elements you want to initialize, such as the source branch and the title.
+ * @param body The new pull request.  The request URL you POST to becomes the destination repository URL. For this reason, you must specify an explicit source repository in the request object if you want to pull from a different repository (fork).  Since not all elements are required or even mutable, you only need to include the elements you want to initialize, such as the source branch and the title.
 
 @return Pullrequest
 */
-
-type RepositoriesUsernameRepoSlugPullrequestsPostOpts struct { 
-	Body optional.Interface
-}
-
-func (a *PullrequestsApiService) RepositoriesUsernameRepoSlugPullrequestsPost(ctx context.Context, username string, repoSlug string, localVarOptionals *RepositoriesUsernameRepoSlugPullrequestsPostOpts) (Pullrequest, *http.Response, error) {
+func (a *PullrequestsApiService) RepositoriesUsernameRepoSlugPullrequestsPost(ctx context.Context, username string, repoSlug string, body Pullrequest) (Pullrequest, *http.Response, error) {
 	var (
 		localVarHttpMethod = strings.ToUpper("Post")
 		localVarPostBody   interface{}
@@ -961,14 +944,7 @@ func (a *PullrequestsApiService) RepositoriesUsernameRepoSlugPullrequestsPost(ct
 		localVarHeaderParams["Accept"] = localVarHttpHeaderAccept
 	}
 	// body params
-	if localVarOptionals != nil && localVarOptionals.Body.IsSet() {
-		
-		localVarOptionalBody, localVarOptionalBodyok := localVarOptionals.Body.Value().(Pullrequest)
-		if !localVarOptionalBodyok {
-				return localVarReturnValue, nil, reportError("body should be Pullrequest")
-		}
-		localVarPostBody = &localVarOptionalBody
-	}
+	localVarPostBody = &body
 	if ctx != nil {
 		// API Key Authentication
 		if auth, ok := ctx.Value(ContextAPIKey).(APIKey); ok {
@@ -2523,17 +2499,11 @@ Merges the pull request.
  * @param username
  * @param pullRequestId
  * @param repoSlug
- * @param optional nil or *RepositoriesUsernameRepoSlugPullrequestsPullRequestIdMergePostOpts - Optional Parameters:
-     * @param "Body" (optional.Interface of PullrequestMergeParameters) - 
+ * @param body
 
 @return Pullrequest
 */
-
-type RepositoriesUsernameRepoSlugPullrequestsPullRequestIdMergePostOpts struct { 
-	Body optional.Interface
-}
-
-func (a *PullrequestsApiService) RepositoriesUsernameRepoSlugPullrequestsPullRequestIdMergePost(ctx context.Context, username string, pullRequestId string, repoSlug string, localVarOptionals *RepositoriesUsernameRepoSlugPullrequestsPullRequestIdMergePostOpts) (Pullrequest, *http.Response, error) {
+func (a *PullrequestsApiService) RepositoriesUsernameRepoSlugPullrequestsPullRequestIdMergePost(ctx context.Context, username string, pullRequestId string, repoSlug string, body PullrequestMergeParameters) (Pullrequest, *http.Response, error) {
 	var (
 		localVarHttpMethod = strings.ToUpper("Post")
 		localVarPostBody   interface{}
@@ -2570,14 +2540,7 @@ func (a *PullrequestsApiService) RepositoriesUsernameRepoSlugPullrequestsPullReq
 		localVarHeaderParams["Accept"] = localVarHttpHeaderAccept
 	}
 	// body params
-	if localVarOptionals != nil && localVarOptionals.Body.IsSet() {
-		
-		localVarOptionalBody, localVarOptionalBodyok := localVarOptionals.Body.Value().(PullrequestMergeParameters)
-		if !localVarOptionalBodyok {
-				return localVarReturnValue, nil, reportError("body should be PullrequestMergeParameters")
-		}
-		localVarPostBody = &localVarOptionalBody
-	}
+	localVarPostBody = &body
 	if ctx != nil {
 		// API Key Authentication
 		if auth, ok := ctx.Value(ContextAPIKey).(APIKey); ok {
@@ -2762,17 +2725,11 @@ Mutates the specified pull request.  This can be used to change the pull request
  * @param username This can either be the username or the UUID of the account, surrounded by curly-braces, for example: &#x60;{account UUID}&#x60;. An account is either a team or user. 
  * @param repoSlug This can either be the repository slug or the UUID of the repository, surrounded by curly-braces, for example: &#x60;{repository UUID}&#x60;. 
  * @param pullRequestId The id of the pull request.
- * @param optional nil or *RepositoriesUsernameRepoSlugPullrequestsPullRequestIdPutOpts - Optional Parameters:
-     * @param "Body" (optional.Interface of Pullrequest) -  The pull request that is to be updated.
+ * @param body The pull request that is to be updated.
 
 @return Pullrequest
 */
-
-type RepositoriesUsernameRepoSlugPullrequestsPullRequestIdPutOpts struct { 
-	Body optional.Interface
-}
-
-func (a *PullrequestsApiService) RepositoriesUsernameRepoSlugPullrequestsPullRequestIdPut(ctx context.Context, username string, repoSlug string, pullRequestId int32, localVarOptionals *RepositoriesUsernameRepoSlugPullrequestsPullRequestIdPutOpts) (Pullrequest, *http.Response, error) {
+func (a *PullrequestsApiService) RepositoriesUsernameRepoSlugPullrequestsPullRequestIdPut(ctx context.Context, username string, repoSlug string, pullRequestId int32, body Pullrequest) (Pullrequest, *http.Response, error) {
 	var (
 		localVarHttpMethod = strings.ToUpper("Put")
 		localVarPostBody   interface{}
@@ -2809,14 +2766,7 @@ func (a *PullrequestsApiService) RepositoriesUsernameRepoSlugPullrequestsPullReq
 		localVarHeaderParams["Accept"] = localVarHttpHeaderAccept
 	}
 	// body params
-	if localVarOptionals != nil && localVarOptionals.Body.IsSet() {
-		
-		localVarOptionalBody, localVarOptionalBodyok := localVarOptionals.Body.Value().(Pullrequest)
-		if !localVarOptionalBodyok {
-				return localVarReturnValue, nil, reportError("body should be Pullrequest")
-		}
-		localVarPostBody = &localVarOptionalBody
-	}
+	localVarPostBody = &body
 	if ctx != nil {
 		// API Key Authentication
 		if auth, ok := ctx.Value(ContextAPIKey).(APIKey); ok {

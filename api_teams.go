@@ -17,7 +17,6 @@ import (
 	"net/url"
 	"strings"
 	"fmt"
-	"github.com/antihax/optional"
 )
 
 // Linger please
@@ -31,17 +30,11 @@ type TeamsApiService service
 TeamsApiService
 Returns all the teams that the authenticated user is associated with.
  * @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- * @param optional nil or *TeamsGetOpts - Optional Parameters:
-     * @param "Role" (optional.String) -   Filters the teams based on the authenticated user&#39;s role on each team.  * **member**: returns a list of all the teams which the caller is a member of   at least one team group or repository owned by the team * **contributor**: returns a list of teams which the caller has write access   to at least one repository owned by the team * **admin**: returns a list teams which the caller has team administrator access 
+ * @param role  Filters the teams based on the authenticated user&#39;s role on each team.  * **member**: returns a list of all the teams which the caller is a member of   at least one team group or repository owned by the team * **contributor**: returns a list of teams which the caller has write access   to at least one repository owned by the team * **admin**: returns a list teams which the caller has team administrator access 
 
 @return PaginatedTeams
 */
-
-type TeamsGetOpts struct { 
-	Role optional.String
-}
-
-func (a *TeamsApiService) TeamsGet(ctx context.Context, localVarOptionals *TeamsGetOpts) (PaginatedTeams, *http.Response, error) {
+func (a *TeamsApiService) TeamsGet(ctx context.Context, role string) (PaginatedTeams, *http.Response, error) {
 	var (
 		localVarHttpMethod = strings.ToUpper("Get")
 		localVarPostBody   interface{}
@@ -57,9 +50,7 @@ func (a *TeamsApiService) TeamsGet(ctx context.Context, localVarOptionals *Teams
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
-	if localVarOptionals != nil && localVarOptionals.Role.IsSet() {
-		localVarQueryParams.Add("role", parameterToString(localVarOptionals.Role.Value(), ""))
-	}
+	localVarQueryParams.Add("role", parameterToString(role, ""))
 	// to determine the Content-Type header
 	localVarHttpContentTypes := []string{"application/json"}
 

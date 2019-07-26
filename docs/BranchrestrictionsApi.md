@@ -12,7 +12,7 @@ Method | HTTP request | Description
 
 
 # **RepositoriesUsernameRepoSlugBranchRestrictionsGet**
-> PaginatedBranchrestrictions RepositoriesUsernameRepoSlugBranchRestrictionsGet(ctx, username, repoSlug, optional)
+> PaginatedBranchrestrictions RepositoriesUsernameRepoSlugBranchRestrictionsGet(ctx, username, repoSlug, kind, pattern)
 
 
 Returns a paginated list of all branch restrictions on the repository.
@@ -24,17 +24,8 @@ Name | Type | Description  | Notes
  **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
   **username** | **string**| This can either be the username or the UUID of the account, surrounded by curly-braces, for example: &#x60;{account UUID}&#x60;. An account is either a team or user.  | 
   **repoSlug** | **string**| This can either be the repository slug or the UUID of the repository, surrounded by curly-braces, for example: &#x60;{repository UUID}&#x60;.  | 
- **optional** | ***RepositoriesUsernameRepoSlugBranchRestrictionsGetOpts** | optional parameters | nil if no parameters
-
-### Optional Parameters
-Optional parameters are passed through a pointer to a RepositoriesUsernameRepoSlugBranchRestrictionsGetOpts struct
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
-
-
- **kind** | **optional.String**| Branch restrictions of this type | 
- **pattern** | **optional.String**| Branch restrictions applied to branches of this pattern | 
+  **kind** | **string**| Branch restrictions of this type | 
+  **pattern** | **string**| Branch restrictions applied to branches of this pattern | 
 
 ### Return type
 

@@ -17,7 +17,6 @@ import (
 	"net/url"
 	"strings"
 	"fmt"
-	"github.com/antihax/optional"
 )
 
 // Linger please
@@ -32,19 +31,12 @@ SearchApiService Search for code in the repositories of the specified team
  * @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param username The account to search in; either the username or the UUID in curly braces
  * @param searchQuery The search query
- * @param optional nil or *SearchAccountOpts - Optional Parameters:
-     * @param "Page" (optional.Int32) -  Which page of the search results to retrieve
-     * @param "Pagelen" (optional.Int32) -  How many search results to retrieve per page
+ * @param page Which page of the search results to retrieve
+ * @param pagelen How many search results to retrieve per page
 
 @return SearchResultPage
 */
-
-type SearchAccountOpts struct { 
-	Page optional.Int32
-	Pagelen optional.Int32
-}
-
-func (a *SearchApiService) SearchAccount(ctx context.Context, username string, searchQuery string, localVarOptionals *SearchAccountOpts) (SearchResultPage, *http.Response, error) {
+func (a *SearchApiService) SearchAccount(ctx context.Context, username string, searchQuery string, page int32, pagelen int32) (SearchResultPage, *http.Response, error) {
 	var (
 		localVarHttpMethod = strings.ToUpper("Get")
 		localVarPostBody   interface{}
@@ -62,12 +54,8 @@ func (a *SearchApiService) SearchAccount(ctx context.Context, username string, s
 	localVarFormParams := url.Values{}
 
 	localVarQueryParams.Add("search_query", parameterToString(searchQuery, ""))
-	if localVarOptionals != nil && localVarOptionals.Page.IsSet() {
-		localVarQueryParams.Add("page", parameterToString(localVarOptionals.Page.Value(), ""))
-	}
-	if localVarOptionals != nil && localVarOptionals.Pagelen.IsSet() {
-		localVarQueryParams.Add("pagelen", parameterToString(localVarOptionals.Pagelen.Value(), ""))
-	}
+	localVarQueryParams.Add("page", parameterToString(page, ""))
+	localVarQueryParams.Add("pagelen", parameterToString(pagelen, ""))
 	// to determine the Content-Type header
 	localVarHttpContentTypes := []string{"application/json"}
 
@@ -170,19 +158,12 @@ SearchApiService Search for code in the repositories of the specified user
  * @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param username The account to search in; either the username or the UUID in curly braces
  * @param searchQuery The search query
- * @param optional nil or *SearchAccount_1Opts - Optional Parameters:
-     * @param "Page" (optional.Int32) -  Which page of the search results to retrieve
-     * @param "Pagelen" (optional.Int32) -  How many search results to retrieve per page
+ * @param page Which page of the search results to retrieve
+ * @param pagelen How many search results to retrieve per page
 
 @return SearchResultPage
 */
-
-type SearchAccount_1Opts struct { 
-	Page optional.Int32
-	Pagelen optional.Int32
-}
-
-func (a *SearchApiService) SearchAccount_1(ctx context.Context, username string, searchQuery string, localVarOptionals *SearchAccount_1Opts) (SearchResultPage, *http.Response, error) {
+func (a *SearchApiService) SearchAccount_1(ctx context.Context, username string, searchQuery string, page int32, pagelen int32) (SearchResultPage, *http.Response, error) {
 	var (
 		localVarHttpMethod = strings.ToUpper("Get")
 		localVarPostBody   interface{}
@@ -200,12 +181,8 @@ func (a *SearchApiService) SearchAccount_1(ctx context.Context, username string,
 	localVarFormParams := url.Values{}
 
 	localVarQueryParams.Add("search_query", parameterToString(searchQuery, ""))
-	if localVarOptionals != nil && localVarOptionals.Page.IsSet() {
-		localVarQueryParams.Add("page", parameterToString(localVarOptionals.Page.Value(), ""))
-	}
-	if localVarOptionals != nil && localVarOptionals.Pagelen.IsSet() {
-		localVarQueryParams.Add("pagelen", parameterToString(localVarOptionals.Pagelen.Value(), ""))
-	}
+	localVarQueryParams.Add("page", parameterToString(page, ""))
+	localVarQueryParams.Add("pagelen", parameterToString(pagelen, ""))
 	// to determine the Content-Type header
 	localVarHttpContentTypes := []string{"application/json"}
 

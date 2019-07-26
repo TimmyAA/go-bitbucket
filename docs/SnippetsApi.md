@@ -31,7 +31,7 @@ Method | HTTP request | Description
 
 
 # **SnippetsGet**
-> PaginatedSnippets SnippetsGet(ctx, optional)
+> PaginatedSnippets SnippetsGet(ctx, role)
 
 
 Returns all snippets. Like pull requests, repositories and teams, the full set of snippets is defined by what the current user has access to.  This includes all snippets owned by the current user, but also all snippets owned by any of the teams the user is a member of, or snippets by other users that the current user is either watching or has collaborated on (for instance by commenting on it).  To limit the set of returned snippets, apply the `?role=[owner|contributor|member]` query parameter where the roles are defined as follows:  * `owner`: all snippets owned by the current user * `contributor`: all snippets owned by, or watched by the current user * `member`: owned by the user, their teams, or watched by the current user  When no role is specified, all public snippets are returned, as well as all privately owned snippets watched or commented on.  The returned response is a normal paginated JSON list. This endpoint only supports `application/json` responses and no `multipart/form-data` or `multipart/related`. As a result, it is not possible to include the file contents.
@@ -41,14 +41,7 @@ Returns all snippets. Like pull requests, repositories and teams, the full set o
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
- **optional** | ***SnippetsGetOpts** | optional parameters | nil if no parameters
-
-### Optional Parameters
-Optional parameters are passed through a pointer to a SnippetsGetOpts struct
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **role** | **optional.String**| Filter down the result based on the authenticated user&#39;s role (&#x60;owner&#x60;, &#x60;contributor&#x60;, or &#x60;member&#x60;). | 
+  **role** | **string**| Filter down the result based on the authenticated user&#39;s role (&#x60;owner&#x60;, &#x60;contributor&#x60;, or &#x60;member&#x60;). | 
 
 ### Return type
 
@@ -697,7 +690,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **SnippetsUsernameGet**
-> PaginatedSnippets SnippetsUsernameGet(ctx, username, optional)
+> PaginatedSnippets SnippetsUsernameGet(ctx, role, username)
 
 
 Identical to `/snippets`, except that the result is further filtered by the snippet owner and only those that are owned by `{username}` are returned.
@@ -707,16 +700,8 @@ Identical to `/snippets`, except that the result is further filtered by the snip
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+  **role** | **string**| Filter down the result based on the authenticated user&#39;s role (&#x60;owner&#x60;, &#x60;contributor&#x60;, or &#x60;member&#x60;). | 
   **username** | **string**| Limits the result to snippets owned by this user. | 
- **optional** | ***SnippetsUsernameGetOpts** | optional parameters | nil if no parameters
-
-### Optional Parameters
-Optional parameters are passed through a pointer to a SnippetsUsernameGetOpts struct
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
-
- **role** | **optional.String**| Filter down the result based on the authenticated user&#39;s role (&#x60;owner&#x60;, &#x60;contributor&#x60;, or &#x60;member&#x60;). | 
 
 ### Return type
 

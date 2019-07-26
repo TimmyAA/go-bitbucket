@@ -147,17 +147,11 @@ PipelinesApiService
 Create an account level variable.
  * @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param username The account.
- * @param optional nil or *CreatePipelineVariableForTeamOpts - Optional Parameters:
-     * @param "Body" (optional.Interface of PipelineVariable) -  The variable to create.
+ * @param body The variable to create.
 
 @return PipelineVariable
 */
-
-type CreatePipelineVariableForTeamOpts struct { 
-	Body optional.Interface
-}
-
-func (a *PipelinesApiService) CreatePipelineVariableForTeam(ctx context.Context, username string, localVarOptionals *CreatePipelineVariableForTeamOpts) (PipelineVariable, *http.Response, error) {
+func (a *PipelinesApiService) CreatePipelineVariableForTeam(ctx context.Context, username string, body PipelineVariable) (PipelineVariable, *http.Response, error) {
 	var (
 		localVarHttpMethod = strings.ToUpper("Post")
 		localVarPostBody   interface{}
@@ -192,14 +186,7 @@ func (a *PipelinesApiService) CreatePipelineVariableForTeam(ctx context.Context,
 		localVarHeaderParams["Accept"] = localVarHttpHeaderAccept
 	}
 	// body params
-	if localVarOptionals != nil && localVarOptionals.Body.IsSet() {
-		
-		localVarOptionalBody, localVarOptionalBodyok := localVarOptionals.Body.Value().(PipelineVariable)
-		if !localVarOptionalBodyok {
-				return localVarReturnValue, nil, reportError("body should be PipelineVariable")
-		}
-		localVarPostBody = &localVarOptionalBody
-	}
+	localVarPostBody = &body
 	r, err := a.client.prepareRequest(ctx, localVarPath, localVarHttpMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFileName, localVarFileBytes)
 	if err != nil {
 		return localVarReturnValue, nil, err
@@ -274,17 +261,11 @@ PipelinesApiService
 Create a user level variable.
  * @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param username The account.
- * @param optional nil or *CreatePipelineVariableForUserOpts - Optional Parameters:
-     * @param "Body" (optional.Interface of PipelineVariable) -  The variable to create.
+ * @param body The variable to create.
 
 @return PipelineVariable
 */
-
-type CreatePipelineVariableForUserOpts struct { 
-	Body optional.Interface
-}
-
-func (a *PipelinesApiService) CreatePipelineVariableForUser(ctx context.Context, username string, localVarOptionals *CreatePipelineVariableForUserOpts) (PipelineVariable, *http.Response, error) {
+func (a *PipelinesApiService) CreatePipelineVariableForUser(ctx context.Context, username string, body PipelineVariable) (PipelineVariable, *http.Response, error) {
 	var (
 		localVarHttpMethod = strings.ToUpper("Post")
 		localVarPostBody   interface{}
@@ -319,14 +300,7 @@ func (a *PipelinesApiService) CreatePipelineVariableForUser(ctx context.Context,
 		localVarHeaderParams["Accept"] = localVarHttpHeaderAccept
 	}
 	// body params
-	if localVarOptionals != nil && localVarOptionals.Body.IsSet() {
-		
-		localVarOptionalBody, localVarOptionalBodyok := localVarOptionals.Body.Value().(PipelineVariable)
-		if !localVarOptionalBodyok {
-				return localVarReturnValue, nil, reportError("body should be PipelineVariable")
-		}
-		localVarPostBody = &localVarOptionalBody
-	}
+	localVarPostBody = &body
 	r, err := a.client.prepareRequest(ctx, localVarPath, localVarHttpMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFileName, localVarFileBytes)
 	if err != nil {
 		return localVarReturnValue, nil, err

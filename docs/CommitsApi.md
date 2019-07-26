@@ -319,7 +319,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **RepositoriesUsernameRepoSlugDiffSpecGet**
-> RepositoriesUsernameRepoSlugDiffSpecGet(ctx, username, spec, repoSlug, optional)
+> RepositoriesUsernameRepoSlugDiffSpecGet(ctx, username, spec, repoSlug, context, path, ignoreWhitespace, binary)
 
 
 Produces a raw, git-style diff for either a single commit (diffed against its first parent), or a revspec of 2 commits (e.g. `3a8b42..9ff173` where the first commit represents the source and the second commit the destination).  In case of the latter (diffing a revspec), a 3-way diff, or merge diff, is computed. This shows the changes introduced by the left branch (`3a8b42` in our example) as compared againt the right branch (`9ff173`).  This is equivalent to merging the left branch into the right branch and then computing the diff of the merge commit against its first parent (the right branch). This follows the same behavior as pull requests that also show this style of 3-way, or merge diff.  While similar to patches, diffs:  * Don't have a commit header (username, commit message, etc) * Support the optional `path=foo/bar.py` query param to filter   the diff to just that one file diff  The raw diff is returned as-is, in whatever encoding the files in the repository use. It is not decoded into unicode. As such, the content-type is `text/plain`.
@@ -332,20 +332,10 @@ Name | Type | Description  | Notes
   **username** | **string**|  | 
   **spec** | **string**|  | 
   **repoSlug** | **string**|  | 
- **optional** | ***RepositoriesUsernameRepoSlugDiffSpecGetOpts** | optional parameters | nil if no parameters
-
-### Optional Parameters
-Optional parameters are passed through a pointer to a RepositoriesUsernameRepoSlugDiffSpecGetOpts struct
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
-
-
-
- **context** | **optional.Int32**| Generate diffs with &lt;n&gt; lines of context instead of the usual three | 
- **path** | **optional.String**| Limit the diff to a particular file (this parameter can be repeated for multiple paths) | 
- **ignoreWhitespace** | **optional.Bool**| Generate diffs that ignore whitespace | 
- **binary** | **optional.Bool**| Generate diffs that include binary files,true if omitted. | 
+  **context** | **int32**| Generate diffs with &lt;n&gt; lines of context instead of the usual three | 
+  **path** | **string**| Limit the diff to a particular file (this parameter can be repeated for multiple paths) | 
+  **ignoreWhitespace** | **bool**| Generate diffs that ignore whitespace | 
+  **binary** | **bool**| Generate diffs that include binary files,true if omitted. | 
 
 ### Return type
 

@@ -17,7 +17,6 @@ import (
 	"net/url"
 	"strings"
 	"fmt"
-	"github.com/antihax/optional"
 )
 
 // Linger please
@@ -1092,23 +1091,14 @@ Produces a raw, git-style diff for either a single commit (diffed against its fi
  * @param username
  * @param spec
  * @param repoSlug
- * @param optional nil or *RepositoriesUsernameRepoSlugDiffSpecGetOpts - Optional Parameters:
-     * @param "Context" (optional.Int32) -  Generate diffs with &lt;n&gt; lines of context instead of the usual three
-     * @param "Path" (optional.String) -  Limit the diff to a particular file (this parameter can be repeated for multiple paths)
-     * @param "IgnoreWhitespace" (optional.Bool) -  Generate diffs that ignore whitespace
-     * @param "Binary" (optional.Bool) -  Generate diffs that include binary files,true if omitted.
+ * @param context Generate diffs with &lt;n&gt; lines of context instead of the usual three
+ * @param path Limit the diff to a particular file (this parameter can be repeated for multiple paths)
+ * @param ignoreWhitespace Generate diffs that ignore whitespace
+ * @param binary Generate diffs that include binary files,true if omitted.
 
 
 */
-
-type RepositoriesUsernameRepoSlugDiffSpecGetOpts struct { 
-	Context optional.Int32
-	Path optional.String
-	IgnoreWhitespace optional.Bool
-	Binary optional.Bool
-}
-
-func (a *CommitsApiService) RepositoriesUsernameRepoSlugDiffSpecGet(ctx context.Context, username string, spec string, repoSlug string, localVarOptionals *RepositoriesUsernameRepoSlugDiffSpecGetOpts) (*http.Response, error) {
+func (a *CommitsApiService) RepositoriesUsernameRepoSlugDiffSpecGet(ctx context.Context, username string, spec string, repoSlug string, context int32, path string, ignoreWhitespace bool, binary bool) (*http.Response, error) {
 	var (
 		localVarHttpMethod = strings.ToUpper("Get")
 		localVarPostBody   interface{}
@@ -1127,18 +1117,10 @@ func (a *CommitsApiService) RepositoriesUsernameRepoSlugDiffSpecGet(ctx context.
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
-	if localVarOptionals != nil && localVarOptionals.Context.IsSet() {
-		localVarQueryParams.Add("context", parameterToString(localVarOptionals.Context.Value(), ""))
-	}
-	if localVarOptionals != nil && localVarOptionals.Path.IsSet() {
-		localVarQueryParams.Add("path", parameterToString(localVarOptionals.Path.Value(), ""))
-	}
-	if localVarOptionals != nil && localVarOptionals.IgnoreWhitespace.IsSet() {
-		localVarQueryParams.Add("ignore_whitespace", parameterToString(localVarOptionals.IgnoreWhitespace.Value(), ""))
-	}
-	if localVarOptionals != nil && localVarOptionals.Binary.IsSet() {
-		localVarQueryParams.Add("binary", parameterToString(localVarOptionals.Binary.Value(), ""))
-	}
+	localVarQueryParams.Add("context", parameterToString(context, ""))
+	localVarQueryParams.Add("path", parameterToString(path, ""))
+	localVarQueryParams.Add("ignore_whitespace", parameterToString(ignoreWhitespace, ""))
+	localVarQueryParams.Add("binary", parameterToString(binary, ""))
 	// to determine the Content-Type header
 	localVarHttpContentTypes := []string{"application/json"}
 

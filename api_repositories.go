@@ -17,7 +17,6 @@ import (
 	"net/url"
 	"strings"
 	"fmt"
-	"github.com/antihax/optional"
 )
 
 // Linger please
@@ -31,17 +30,11 @@ type RepositoriesApiService service
 RepositoriesApiService
 Returns a paginated list of all public repositories.  This endpoint also supports filtering and sorting of the results. See [filtering and sorting](../meta/filtering) for more details.
  * @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- * @param optional nil or *RepositoriesGetOpts - Optional Parameters:
-     * @param "After" (optional.String) -  Filter the results to include only repositories create on or after this [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601)  timestamp. Example: &#x60;YYYY-MM-DDTHH:mm:ss.sssZ&#x60;
+ * @param after Filter the results to include only repositories create on or after this [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601)  timestamp. Example: &#x60;YYYY-MM-DDTHH:mm:ss.sssZ&#x60;
 
 @return PaginatedRepositories
 */
-
-type RepositoriesGetOpts struct { 
-	After optional.String
-}
-
-func (a *RepositoriesApiService) RepositoriesGet(ctx context.Context, localVarOptionals *RepositoriesGetOpts) (PaginatedRepositories, *http.Response, error) {
+func (a *RepositoriesApiService) RepositoriesGet(ctx context.Context, after string) (PaginatedRepositories, *http.Response, error) {
 	var (
 		localVarHttpMethod = strings.ToUpper("Get")
 		localVarPostBody   interface{}
@@ -57,9 +50,7 @@ func (a *RepositoriesApiService) RepositoriesGet(ctx context.Context, localVarOp
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
-	if localVarOptionals != nil && localVarOptionals.After.IsSet() {
-		localVarQueryParams.Add("after", parameterToString(localVarOptionals.After.Value(), ""))
-	}
+	localVarQueryParams.Add("after", parameterToString(after, ""))
 	// to determine the Content-Type header
 	localVarHttpContentTypes := []string{"application/json"}
 
@@ -142,17 +133,11 @@ RepositoriesApiService
 Returns a paginated list of all repositories owned by the specified account or UUID.  The result can be narrowed down based on the authenticated user&#39;s role.  E.g. with &#x60;?role&#x3D;contributor&#x60;, only those repositories that the authenticated user has write access to are returned (this includes any repo the user is an admin on, as that implies write access).  This endpoint also supports filtering and sorting of the results. See [filtering and sorting](../../meta/filtering) for more details.
  * @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param username This can either be the username or the UUID of the account, surrounded by curly-braces, for example: &#x60;{account UUID}&#x60;. An account is either a team or user. 
- * @param optional nil or *RepositoriesUsernameGetOpts - Optional Parameters:
-     * @param "Role" (optional.String) -   Filters the result based on the authenticated user&#39;s role on each repository.  * **member**: returns repositories to which the user has explicit read access * **contributor**: returns repositories to which the user has explicit write access * **admin**: returns repositories to which the user has explicit administrator access * **owner**: returns all repositories owned by the current user 
+ * @param role  Filters the result based on the authenticated user&#39;s role on each repository.  * **member**: returns repositories to which the user has explicit read access * **contributor**: returns repositories to which the user has explicit write access * **admin**: returns repositories to which the user has explicit administrator access * **owner**: returns all repositories owned by the current user 
 
 @return PaginatedRepositories
 */
-
-type RepositoriesUsernameGetOpts struct { 
-	Role optional.String
-}
-
-func (a *RepositoriesApiService) RepositoriesUsernameGet(ctx context.Context, username string, localVarOptionals *RepositoriesUsernameGetOpts) (PaginatedRepositories, *http.Response, error) {
+func (a *RepositoriesApiService) RepositoriesUsernameGet(ctx context.Context, username string, role string) (PaginatedRepositories, *http.Response, error) {
 	var (
 		localVarHttpMethod = strings.ToUpper("Get")
 		localVarPostBody   interface{}
@@ -169,9 +154,7 @@ func (a *RepositoriesApiService) RepositoriesUsernameGet(ctx context.Context, us
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
-	if localVarOptionals != nil && localVarOptionals.Role.IsSet() {
-		localVarQueryParams.Add("role", parameterToString(localVarOptionals.Role.Value(), ""))
-	}
+	localVarQueryParams.Add("role", parameterToString(role, ""))
 	// to determine the Content-Type header
 	localVarHttpContentTypes := []string{"application/json"}
 
@@ -387,17 +370,11 @@ Used to update the current status of a build status object on the specific commi
  * @param node The commit&#39;s SHA1.
  * @param key The build status&#39; unique key
  * @param repoSlug This can either be the repository slug or the UUID of the repository, surrounded by curly-braces, for example: &#x60;{repository UUID}&#x60;. 
- * @param optional nil or *RepositoriesUsernameRepoSlugCommitNodeStatusesBuildKeyPutOpts - Optional Parameters:
-     * @param "Body" (optional.Interface of Commitstatus) -  The updated build status object
+ * @param body The updated build status object
 
 @return Commitstatus
 */
-
-type RepositoriesUsernameRepoSlugCommitNodeStatusesBuildKeyPutOpts struct { 
-	Body optional.Interface
-}
-
-func (a *RepositoriesApiService) RepositoriesUsernameRepoSlugCommitNodeStatusesBuildKeyPut(ctx context.Context, username string, node string, key string, repoSlug string, localVarOptionals *RepositoriesUsernameRepoSlugCommitNodeStatusesBuildKeyPutOpts) (Commitstatus, *http.Response, error) {
+func (a *RepositoriesApiService) RepositoriesUsernameRepoSlugCommitNodeStatusesBuildKeyPut(ctx context.Context, username string, node string, key string, repoSlug string, body Commitstatus) (Commitstatus, *http.Response, error) {
 	var (
 		localVarHttpMethod = strings.ToUpper("Put")
 		localVarPostBody   interface{}
@@ -435,14 +412,7 @@ func (a *RepositoriesApiService) RepositoriesUsernameRepoSlugCommitNodeStatusesB
 		localVarHeaderParams["Accept"] = localVarHttpHeaderAccept
 	}
 	// body params
-	if localVarOptionals != nil && localVarOptionals.Body.IsSet() {
-		
-		localVarOptionalBody, localVarOptionalBodyok := localVarOptionals.Body.Value().(Commitstatus)
-		if !localVarOptionalBodyok {
-				return localVarReturnValue, nil, reportError("body should be Commitstatus")
-		}
-		localVarPostBody = &localVarOptionalBody
-	}
+	localVarPostBody = &body
 	if ctx != nil {
 		// API Key Authentication
 		if auth, ok := ctx.Value(ContextAPIKey).(APIKey); ok {
@@ -521,17 +491,11 @@ Creates a new build status against the specified commit.  If the specified key a
  * @param username This can either be the username or the UUID of the account, surrounded by curly-braces, for example: &#x60;{account UUID}&#x60;. An account is either a team or user. 
  * @param node The commit&#39;s SHA1.
  * @param repoSlug This can either be the repository slug or the UUID of the repository, surrounded by curly-braces, for example: &#x60;{repository UUID}&#x60;. 
- * @param optional nil or *RepositoriesUsernameRepoSlugCommitNodeStatusesBuildPostOpts - Optional Parameters:
-     * @param "Body" (optional.Interface of Commitstatus) -  The new commit status object.
+ * @param body The new commit status object.
 
 @return Commitstatus
 */
-
-type RepositoriesUsernameRepoSlugCommitNodeStatusesBuildPostOpts struct { 
-	Body optional.Interface
-}
-
-func (a *RepositoriesApiService) RepositoriesUsernameRepoSlugCommitNodeStatusesBuildPost(ctx context.Context, username string, node string, repoSlug string, localVarOptionals *RepositoriesUsernameRepoSlugCommitNodeStatusesBuildPostOpts) (Commitstatus, *http.Response, error) {
+func (a *RepositoriesApiService) RepositoriesUsernameRepoSlugCommitNodeStatusesBuildPost(ctx context.Context, username string, node string, repoSlug string, body Commitstatus) (Commitstatus, *http.Response, error) {
 	var (
 		localVarHttpMethod = strings.ToUpper("Post")
 		localVarPostBody   interface{}
@@ -568,14 +532,7 @@ func (a *RepositoriesApiService) RepositoriesUsernameRepoSlugCommitNodeStatusesB
 		localVarHeaderParams["Accept"] = localVarHttpHeaderAccept
 	}
 	// body params
-	if localVarOptionals != nil && localVarOptionals.Body.IsSet() {
-		
-		localVarOptionalBody, localVarOptionalBodyok := localVarOptionals.Body.Value().(Commitstatus)
-		if !localVarOptionalBodyok {
-				return localVarReturnValue, nil, reportError("body should be Commitstatus")
-		}
-		localVarPostBody = &localVarOptionalBody
-	}
+	localVarPostBody = &body
 	if ctx != nil {
 		// API Key Authentication
 		if auth, ok := ctx.Value(ContextAPIKey).(APIKey); ok {
@@ -770,17 +727,11 @@ Deletes the repository. This is an irreversible operation.  This does not affect
  * @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param username This can either be the username or the UUID of the account, surrounded by curly-braces, for example: &#x60;{account UUID}&#x60;. An account is either a team or user. 
  * @param repoSlug This can either be the repository slug or the UUID of the repository, surrounded by curly-braces, for example: &#x60;{repository UUID}&#x60;. 
- * @param optional nil or *RepositoriesUsernameRepoSlugDeleteOpts - Optional Parameters:
-     * @param "RedirectTo" (optional.String) -  If a repository has been moved to a new location, use this parameter to show users a friendly message in the Bitbucket UI that the repository has moved to a new location. However, a GET to this endpoint will still return a 404. 
+ * @param redirectTo If a repository has been moved to a new location, use this parameter to show users a friendly message in the Bitbucket UI that the repository has moved to a new location. However, a GET to this endpoint will still return a 404. 
 
 
 */
-
-type RepositoriesUsernameRepoSlugDeleteOpts struct { 
-	RedirectTo optional.String
-}
-
-func (a *RepositoriesApiService) RepositoriesUsernameRepoSlugDelete(ctx context.Context, username string, repoSlug string, localVarOptionals *RepositoriesUsernameRepoSlugDeleteOpts) (*http.Response, error) {
+func (a *RepositoriesApiService) RepositoriesUsernameRepoSlugDelete(ctx context.Context, username string, repoSlug string, redirectTo string) (*http.Response, error) {
 	var (
 		localVarHttpMethod = strings.ToUpper("Delete")
 		localVarPostBody   interface{}
@@ -798,9 +749,7 @@ func (a *RepositoriesApiService) RepositoriesUsernameRepoSlugDelete(ctx context.
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
-	if localVarOptionals != nil && localVarOptionals.RedirectTo.IsSet() {
-		localVarQueryParams.Add("redirect_to", parameterToString(localVarOptionals.RedirectTo.Value(), ""))
-	}
+	localVarQueryParams.Add("redirect_to", parameterToString(redirectTo, ""))
 	// to determine the Content-Type header
 	localVarHttpContentTypes := []string{"application/json"}
 
@@ -890,21 +839,13 @@ Returns a paginated list of commits that modified the specified file.  Commits a
  * @param node
  * @param path
  * @param repoSlug
- * @param optional nil or *RepositoriesUsernameRepoSlugFilehistoryNodePathGetOpts - Optional Parameters:
-     * @param "Renames" (optional.String) -   When &#x60;true&#x60;, Bitbucket will follow the history of the file across renames (this is the default behavior). This can be turned off by specifying &#x60;false&#x60;.
-     * @param "Q" (optional.String) -   Query string to narrow down the response as per [filtering and sorting](../../../../../../meta/filtering).
-     * @param "Sort" (optional.String) -   Name of a response property sort the result by as per [filtering and sorting](../../../../../../meta/filtering#query-sort). 
+ * @param renames  When &#x60;true&#x60;, Bitbucket will follow the history of the file across renames (this is the default behavior). This can be turned off by specifying &#x60;false&#x60;.
+ * @param q  Query string to narrow down the response as per [filtering and sorting](../../../../../../meta/filtering).
+ * @param sort  Name of a response property sort the result by as per [filtering and sorting](../../../../../../meta/filtering#query-sort). 
 
 @return PaginatedFiles
 */
-
-type RepositoriesUsernameRepoSlugFilehistoryNodePathGetOpts struct { 
-	Renames optional.String
-	Q optional.String
-	Sort optional.String
-}
-
-func (a *RepositoriesApiService) RepositoriesUsernameRepoSlugFilehistoryNodePathGet(ctx context.Context, username string, node string, path string, repoSlug string, localVarOptionals *RepositoriesUsernameRepoSlugFilehistoryNodePathGetOpts) (PaginatedFiles, *http.Response, error) {
+func (a *RepositoriesApiService) RepositoriesUsernameRepoSlugFilehistoryNodePathGet(ctx context.Context, username string, node string, path string, repoSlug string, renames string, q string, sort string) (PaginatedFiles, *http.Response, error) {
 	var (
 		localVarHttpMethod = strings.ToUpper("Get")
 		localVarPostBody   interface{}
@@ -924,15 +865,9 @@ func (a *RepositoriesApiService) RepositoriesUsernameRepoSlugFilehistoryNodePath
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
-	if localVarOptionals != nil && localVarOptionals.Renames.IsSet() {
-		localVarQueryParams.Add("renames", parameterToString(localVarOptionals.Renames.Value(), ""))
-	}
-	if localVarOptionals != nil && localVarOptionals.Q.IsSet() {
-		localVarQueryParams.Add("q", parameterToString(localVarOptionals.Q.Value(), ""))
-	}
-	if localVarOptionals != nil && localVarOptionals.Sort.IsSet() {
-		localVarQueryParams.Add("sort", parameterToString(localVarOptionals.Sort.Value(), ""))
-	}
+	localVarQueryParams.Add("renames", parameterToString(renames, ""))
+	localVarQueryParams.Add("q", parameterToString(q, ""))
+	localVarQueryParams.Add("sort", parameterToString(sort, ""))
 	// to determine the Content-Type header
 	localVarHttpContentTypes := []string{"application/json"}
 
@@ -1131,17 +1066,11 @@ Creates a new fork of the specified repository.  By default, forks are created u
  * @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param username This can either be the username or the UUID of the account, surrounded by curly-braces, for example: &#x60;{account UUID}&#x60;. An account is either a team or user. 
  * @param repoSlug This can either be the repository slug or the UUID of the repository, surrounded by curly-braces, for example: &#x60;{repository UUID}&#x60;. 
- * @param optional nil or *RepositoriesUsernameRepoSlugForksPostOpts - Optional Parameters:
-     * @param "Body" (optional.Interface of Repository) -  A repository object. This can be left blank.
+ * @param body A repository object. This can be left blank.
 
 @return Repository
 */
-
-type RepositoriesUsernameRepoSlugForksPostOpts struct { 
-	Body optional.Interface
-}
-
-func (a *RepositoriesApiService) RepositoriesUsernameRepoSlugForksPost(ctx context.Context, username string, repoSlug string, localVarOptionals *RepositoriesUsernameRepoSlugForksPostOpts) (Repository, *http.Response, error) {
+func (a *RepositoriesApiService) RepositoriesUsernameRepoSlugForksPost(ctx context.Context, username string, repoSlug string, body Repository) (Repository, *http.Response, error) {
 	var (
 		localVarHttpMethod = strings.ToUpper("Post")
 		localVarPostBody   interface{}
@@ -1177,14 +1106,7 @@ func (a *RepositoriesApiService) RepositoriesUsernameRepoSlugForksPost(ctx conte
 		localVarHeaderParams["Accept"] = localVarHttpHeaderAccept
 	}
 	// body params
-	if localVarOptionals != nil && localVarOptionals.Body.IsSet() {
-		
-		localVarOptionalBody, localVarOptionalBodyok := localVarOptionals.Body.Value().(Repository)
-		if !localVarOptionalBodyok {
-				return localVarReturnValue, nil, reportError("body should be Repository")
-		}
-		localVarPostBody = &localVarOptionalBody
-	}
+	localVarPostBody = &body
 	if ctx != nil {
 		// API Key Authentication
 		if auth, ok := ctx.Value(ContextAPIKey).(APIKey); ok {
@@ -1984,17 +1906,11 @@ Creates a new repository.  Note: In order to set the project for the newly creat
  * @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param username This can either be the username or the UUID of the account, surrounded by curly-braces, for example: &#x60;{account UUID}&#x60;. An account is either a team or user. 
  * @param repoSlug This can either be the repository slug or the UUID of the repository, surrounded by curly-braces, for example: &#x60;{repository UUID}&#x60;. 
- * @param optional nil or *RepositoriesUsernameRepoSlugPostOpts - Optional Parameters:
-     * @param "Body" (optional.Interface of Repository) -  The repository that is to be created. Note that most object elements are optional. Elements \&quot;owner\&quot; and \&quot;full_name\&quot; are ignored as the URL implies them.
+ * @param body The repository that is to be created. Note that most object elements are optional. Elements \&quot;owner\&quot; and \&quot;full_name\&quot; are ignored as the URL implies them.
 
 @return Repository
 */
-
-type RepositoriesUsernameRepoSlugPostOpts struct { 
-	Body optional.Interface
-}
-
-func (a *RepositoriesApiService) RepositoriesUsernameRepoSlugPost(ctx context.Context, username string, repoSlug string, localVarOptionals *RepositoriesUsernameRepoSlugPostOpts) (Repository, *http.Response, error) {
+func (a *RepositoriesApiService) RepositoriesUsernameRepoSlugPost(ctx context.Context, username string, repoSlug string, body Repository) (Repository, *http.Response, error) {
 	var (
 		localVarHttpMethod = strings.ToUpper("Post")
 		localVarPostBody   interface{}
@@ -2030,14 +1946,7 @@ func (a *RepositoriesApiService) RepositoriesUsernameRepoSlugPost(ctx context.Co
 		localVarHeaderParams["Accept"] = localVarHttpHeaderAccept
 	}
 	// body params
-	if localVarOptionals != nil && localVarOptionals.Body.IsSet() {
-		
-		localVarOptionalBody, localVarOptionalBodyok := localVarOptionals.Body.Value().(Repository)
-		if !localVarOptionalBodyok {
-				return localVarReturnValue, nil, reportError("body should be Repository")
-		}
-		localVarPostBody = &localVarOptionalBody
-	}
+	localVarPostBody = &body
 	if ctx != nil {
 		// API Key Authentication
 		if auth, ok := ctx.Value(ContextAPIKey).(APIKey); ok {
@@ -2243,17 +2152,11 @@ Since this endpoint can be used to both update and to create a repository, the r
  * @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param username This can either be the username or the UUID of the account, surrounded by curly-braces, for example: &#x60;{account UUID}&#x60;. An account is either a team or user. 
  * @param repoSlug This can either be the repository slug or the UUID of the repository, surrounded by curly-braces, for example: &#x60;{repository UUID}&#x60;. 
- * @param optional nil or *RepositoriesUsernameRepoSlugPutOpts - Optional Parameters:
-     * @param "Body" (optional.Interface of Repository) -  The repository that is to be updated.  Note that the elements \&quot;owner\&quot; and \&quot;full_name\&quot; are ignored since the URL implies them. 
+ * @param body The repository that is to be updated.  Note that the elements \&quot;owner\&quot; and \&quot;full_name\&quot; are ignored since the URL implies them. 
 
 @return Repository
 */
-
-type RepositoriesUsernameRepoSlugPutOpts struct { 
-	Body optional.Interface
-}
-
-func (a *RepositoriesApiService) RepositoriesUsernameRepoSlugPut(ctx context.Context, username string, repoSlug string, localVarOptionals *RepositoriesUsernameRepoSlugPutOpts) (Repository, *http.Response, error) {
+func (a *RepositoriesApiService) RepositoriesUsernameRepoSlugPut(ctx context.Context, username string, repoSlug string, body Repository) (Repository, *http.Response, error) {
 	var (
 		localVarHttpMethod = strings.ToUpper("Put")
 		localVarPostBody   interface{}
@@ -2289,14 +2192,7 @@ func (a *RepositoriesApiService) RepositoriesUsernameRepoSlugPut(ctx context.Con
 		localVarHeaderParams["Accept"] = localVarHttpHeaderAccept
 	}
 	// body params
-	if localVarOptionals != nil && localVarOptionals.Body.IsSet() {
-		
-		localVarOptionalBody, localVarOptionalBodyok := localVarOptionals.Body.Value().(Repository)
-		if !localVarOptionalBodyok {
-				return localVarReturnValue, nil, reportError("body should be Repository")
-		}
-		localVarPostBody = &localVarOptionalBody
-	}
+	localVarPostBody = &body
 	if ctx != nil {
 		// API Key Authentication
 		if auth, ok := ctx.Value(ContextAPIKey).(APIKey); ok {
@@ -2396,17 +2292,11 @@ This endpoint redirects the client to the directory listing of the root director
  * @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param username
  * @param repoSlug
- * @param optional nil or *RepositoriesUsernameRepoSlugSrcGetOpts - Optional Parameters:
-     * @param "Format" (optional.String) -  Instead of returning the file&#39;s contents, return the (json) meta data for it.
+ * @param format Instead of returning the file&#39;s contents, return the (json) meta data for it.
 
 @return PaginatedTreeentries
 */
-
-type RepositoriesUsernameRepoSlugSrcGetOpts struct { 
-	Format optional.String
-}
-
-func (a *RepositoriesApiService) RepositoriesUsernameRepoSlugSrcGet(ctx context.Context, username string, repoSlug string, localVarOptionals *RepositoriesUsernameRepoSlugSrcGetOpts) (PaginatedTreeentries, *http.Response, error) {
+func (a *RepositoriesApiService) RepositoriesUsernameRepoSlugSrcGet(ctx context.Context, username string, repoSlug string, format string) (PaginatedTreeentries, *http.Response, error) {
 	var (
 		localVarHttpMethod = strings.ToUpper("Get")
 		localVarPostBody   interface{}
@@ -2424,9 +2314,7 @@ func (a *RepositoriesApiService) RepositoriesUsernameRepoSlugSrcGet(ctx context.
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
-	if localVarOptionals != nil && localVarOptionals.Format.IsSet() {
-		localVarQueryParams.Add("format", parameterToString(localVarOptionals.Format.Value(), ""))
-	}
+	localVarQueryParams.Add("format", parameterToString(format, ""))
 	// to determine the Content-Type header
 	localVarHttpContentTypes := []string{"application/json"}
 
@@ -2523,23 +2411,14 @@ This endpoints is used to retrieve the contents of a single file, or the content
  * @param node
  * @param path
  * @param repoSlug
- * @param optional nil or *RepositoriesUsernameRepoSlugSrcNodePathGetOpts - Optional Parameters:
-     * @param "Format" (optional.String) -  If &#39;meta&#39; is provided, returns the (json) meta data for the contents of the file.  If &#39;rendered&#39; is provided, returns the contents of a non-binary file in HTML-formatted rendered markup. Since Git and Mercurial do not generally track what text encoding scheme is used, this endpoint attempts to detect the most appropriate character encoding. While usually correct, determining the character encoding can be ambiguous which in exceptional cases can lead to misinterpretation of the characters. As such, the raw element in the response object should not be treated as equivalent to the file&#39;s actual contents.
-     * @param "Q" (optional.String) -  Optional filter expression as per [filtering and sorting](../../../../../../meta/filtering).
-     * @param "Sort" (optional.String) -  Optional sorting parameter as per [filtering and sorting](../../../../../../meta/filtering#query-sort).
-     * @param "MaxDepth" (optional.Int32) -  If provided, returns the contents of the repository and its subdirectories recursively until the specified max_depth of nested directories. When omitted, this defaults to 1.
+ * @param format If &#39;meta&#39; is provided, returns the (json) meta data for the contents of the file.  If &#39;rendered&#39; is provided, returns the contents of a non-binary file in HTML-formatted rendered markup. Since Git and Mercurial do not generally track what text encoding scheme is used, this endpoint attempts to detect the most appropriate character encoding. While usually correct, determining the character encoding can be ambiguous which in exceptional cases can lead to misinterpretation of the characters. As such, the raw element in the response object should not be treated as equivalent to the file&#39;s actual contents.
+ * @param q Optional filter expression as per [filtering and sorting](../../../../../../meta/filtering).
+ * @param sort Optional sorting parameter as per [filtering and sorting](../../../../../../meta/filtering#query-sort).
+ * @param maxDepth If provided, returns the contents of the repository and its subdirectories recursively until the specified max_depth of nested directories. When omitted, this defaults to 1.
 
 @return PaginatedTreeentries
 */
-
-type RepositoriesUsernameRepoSlugSrcNodePathGetOpts struct { 
-	Format optional.String
-	Q optional.String
-	Sort optional.String
-	MaxDepth optional.Int32
-}
-
-func (a *RepositoriesApiService) RepositoriesUsernameRepoSlugSrcNodePathGet(ctx context.Context, username string, node string, path string, repoSlug string, localVarOptionals *RepositoriesUsernameRepoSlugSrcNodePathGetOpts) (PaginatedTreeentries, *http.Response, error) {
+func (a *RepositoriesApiService) RepositoriesUsernameRepoSlugSrcNodePathGet(ctx context.Context, username string, node string, path string, repoSlug string, format string, q string, sort string, maxDepth int32) (PaginatedTreeentries, *http.Response, error) {
 	var (
 		localVarHttpMethod = strings.ToUpper("Get")
 		localVarPostBody   interface{}
@@ -2559,18 +2438,10 @@ func (a *RepositoriesApiService) RepositoriesUsernameRepoSlugSrcNodePathGet(ctx 
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
-	if localVarOptionals != nil && localVarOptionals.Format.IsSet() {
-		localVarQueryParams.Add("format", parameterToString(localVarOptionals.Format.Value(), ""))
-	}
-	if localVarOptionals != nil && localVarOptionals.Q.IsSet() {
-		localVarQueryParams.Add("q", parameterToString(localVarOptionals.Q.Value(), ""))
-	}
-	if localVarOptionals != nil && localVarOptionals.Sort.IsSet() {
-		localVarQueryParams.Add("sort", parameterToString(localVarOptionals.Sort.Value(), ""))
-	}
-	if localVarOptionals != nil && localVarOptionals.MaxDepth.IsSet() {
-		localVarQueryParams.Add("max_depth", parameterToString(localVarOptionals.MaxDepth.Value(), ""))
-	}
+	localVarQueryParams.Add("format", parameterToString(format, ""))
+	localVarQueryParams.Add("q", parameterToString(q, ""))
+	localVarQueryParams.Add("sort", parameterToString(sort, ""))
+	localVarQueryParams.Add("max_depth", parameterToString(maxDepth, ""))
 	// to determine the Content-Type header
 	localVarHttpContentTypes := []string{"application/json"}
 
@@ -2676,27 +2547,16 @@ This endpoint is used to create new commits in the repository by uploading files
  * @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param username
  * @param repoSlug
- * @param optional nil or *RepositoriesUsernameRepoSlugSrcPostOpts - Optional Parameters:
-     * @param "Message" (optional.String) -  The commit message. When omitted, Bitbucket uses a canned string.
-     * @param "Author" (optional.String) -   The raw string to be used as the new commit&#39;s author. This string follows the format &#x60;Erik van Zijst &lt;evzijst@atlassian.com&gt;&#x60;.  When omitted, Bitbucket uses the authenticated user&#39;s full/display name and primary email address. Commits cannot be created anonymously.
-     * @param "Parents" (optional.String) -   A comma-separated list of SHA1s of the commits that should be the parents of the newly created commit.  When omitted, the new commit will inherit from and become a child of the main branch&#39;s tip/HEAD commit.  When more than one SHA1 is provided, the first SHA1 identifies the commit from which the content will be inherited.  When more than 2 parents are provided on a Mercurial repo, a 400 is returned as Mercurial does not support \&quot;octopus merges\&quot;.
-     * @param "Files" (optional.String) -   Optional field that declares the files that the request is manipulating. When adding a new file to a repo, or when overwriting an existing file, the client can just upload the full contents of the file in a normal form field and the use of this &#x60;files&#x60; meta data field is redundant. However, when the &#x60;files&#x60; field contains a file path that does not have a corresponding, identically-named form field, then Bitbucket interprets that as the client wanting to replace the named file with the null set and the file is deleted instead.  Paths in the repo that are referenced in neither files nor an individual file field, remain unchanged and carry over from the parent to the new commit.  This API does not support renaming as an explicit feature. To rename a file, simply delete it and recreate it under the new name in the same commit. 
-     * @param "Files" (optional.String) -   The name of the branch that the new commit should be created on. When omitted, the commit will be created on top of the main branch and will become the main branch&#39;s new HEAD/tip.  When a branch name is provided that already exists in the repo, then the commit will be created on top of that branch. In this case, if a parent SHA1 was also provided, then it is asserted that the parent is the branch&#39;s tip/HEAD at the time the request is made. When this is not the case, a 409 is returned.  This API cannot be used to create new anonymous heads in Mercurial repos.  When a new branch name is specified (that does not already exist in the repo), and no parent SHA1s are provided, then the new commit will inherit from the current main branch&#39;s tip/HEAD commit, but not advance the main branch. The new commit will be the new branch. When the request also specifies a parent SHA1, then the new commit and branch are created directly on top of the parent commit, regardless of the state of the main branch.  When a branch name is not specified, but a parent SHA1 is provided, then Bitbucket asserts that it represents the main branch&#39;s current HEAD/tip, or a 409 is returned.  When a branch name is not specified and the repo is empty, the new commit will become the repo&#39;s root commit and will be on the main branch.  When a branch name is specified and the repo is empty, the new commit will become the repo&#39;s root commit and also define the repo&#39;s main branch going forward.  This API cannot be used to create additional root commits in non-empty repos.  The branch field cannot be repeated.  As a side effect, this API can be used to create a new branch without modifying any files, by specifying a new branch name in this field, together with parents, but omitting the files fields, while not sending any files. This will create a new commit and branch with the same contents as the first parent. The diff of this commit against its first parent will be empty. 
-     * @param "Branch" (optional.String) -   The name of the branch that the new commit should be created on. When omitted, the commit will be created on top of the main branch and will become the main branch&#39;s new head.  When a branch name is provided that already exists in the repo, then the commit will be created on top of that branch. In this case, *if* a parent SHA1 was also provided, then it is asserted that the parent is the branch&#39;s tip/HEAD at the time the request is made. When this is not the case, a 409 is returned.  This API cannot be used to create new anonymous heads in Mercurial repositories.  When a new branch name is specified (that does not already exist in the repo), and no parent SHA1s are provided, then the new commit will inherit from the current main branch&#39;s tip/HEAD commit, but not advance the main branch. The new commit will be the new branch. When the request *also* specifies a parent SHA1, then the new commit and branch are created directly on top of the parent commit, regardless of the state of the main branch.  When a branch name is not specified, but a parent SHA1 is provided, then Bitbucket asserts that it represents the main branch&#39;s current HEAD/tip, or a 409 is returned.  When a branch name is not specified and the repo is empty, the new commit will become the repo&#39;s root commit and will be on the main branch.  When a branch name is specified and the repo is empty, the new commit will become the repo&#39;s root commit and also define the repo&#39;s main branch going forward.  This API cannot be used to create additional root commits in non-empty repos.  The branch field cannot be repeated.  As a side effect, this API can be used to create a new branch without modifying any files, by specifying a new branch name in this field, together with &#x60;parents&#x60;, but omitting the &#x60;files&#x60; fields, while not sending any files. This will create a new commit and branch with the same contents as the first parent. The diff of this commit against its first parent will be empty. 
+ * @param message The commit message. When omitted, Bitbucket uses a canned string.
+ * @param author  The raw string to be used as the new commit&#39;s author. This string follows the format &#x60;Erik van Zijst &lt;evzijst@atlassian.com&gt;&#x60;.  When omitted, Bitbucket uses the authenticated user&#39;s full/display name and primary email address. Commits cannot be created anonymously.
+ * @param parents  A comma-separated list of SHA1s of the commits that should be the parents of the newly created commit.  When omitted, the new commit will inherit from and become a child of the main branch&#39;s tip/HEAD commit.  When more than one SHA1 is provided, the first SHA1 identifies the commit from which the content will be inherited.  When more than 2 parents are provided on a Mercurial repo, a 400 is returned as Mercurial does not support \&quot;octopus merges\&quot;.
+ * @param files  Optional field that declares the files that the request is manipulating. When adding a new file to a repo, or when overwriting an existing file, the client can just upload the full contents of the file in a normal form field and the use of this &#x60;files&#x60; meta data field is redundant. However, when the &#x60;files&#x60; field contains a file path that does not have a corresponding, identically-named form field, then Bitbucket interprets that as the client wanting to replace the named file with the null set and the file is deleted instead.  Paths in the repo that are referenced in neither files nor an individual file field, remain unchanged and carry over from the parent to the new commit.  This API does not support renaming as an explicit feature. To rename a file, simply delete it and recreate it under the new name in the same commit. 
+ * @param files2  The name of the branch that the new commit should be created on. When omitted, the commit will be created on top of the main branch and will become the main branch&#39;s new HEAD/tip.  When a branch name is provided that already exists in the repo, then the commit will be created on top of that branch. In this case, if a parent SHA1 was also provided, then it is asserted that the parent is the branch&#39;s tip/HEAD at the time the request is made. When this is not the case, a 409 is returned.  This API cannot be used to create new anonymous heads in Mercurial repos.  When a new branch name is specified (that does not already exist in the repo), and no parent SHA1s are provided, then the new commit will inherit from the current main branch&#39;s tip/HEAD commit, but not advance the main branch. The new commit will be the new branch. When the request also specifies a parent SHA1, then the new commit and branch are created directly on top of the parent commit, regardless of the state of the main branch.  When a branch name is not specified, but a parent SHA1 is provided, then Bitbucket asserts that it represents the main branch&#39;s current HEAD/tip, or a 409 is returned.  When a branch name is not specified and the repo is empty, the new commit will become the repo&#39;s root commit and will be on the main branch.  When a branch name is specified and the repo is empty, the new commit will become the repo&#39;s root commit and also define the repo&#39;s main branch going forward.  This API cannot be used to create additional root commits in non-empty repos.  The branch field cannot be repeated.  As a side effect, this API can be used to create a new branch without modifying any files, by specifying a new branch name in this field, together with parents, but omitting the files fields, while not sending any files. This will create a new commit and branch with the same contents as the first parent. The diff of this commit against its first parent will be empty. 
+ * @param branch  The name of the branch that the new commit should be created on. When omitted, the commit will be created on top of the main branch and will become the main branch&#39;s new head.  When a branch name is provided that already exists in the repo, then the commit will be created on top of that branch. In this case, *if* a parent SHA1 was also provided, then it is asserted that the parent is the branch&#39;s tip/HEAD at the time the request is made. When this is not the case, a 409 is returned.  This API cannot be used to create new anonymous heads in Mercurial repositories.  When a new branch name is specified (that does not already exist in the repo), and no parent SHA1s are provided, then the new commit will inherit from the current main branch&#39;s tip/HEAD commit, but not advance the main branch. The new commit will be the new branch. When the request *also* specifies a parent SHA1, then the new commit and branch are created directly on top of the parent commit, regardless of the state of the main branch.  When a branch name is not specified, but a parent SHA1 is provided, then Bitbucket asserts that it represents the main branch&#39;s current HEAD/tip, or a 409 is returned.  When a branch name is not specified and the repo is empty, the new commit will become the repo&#39;s root commit and will be on the main branch.  When a branch name is specified and the repo is empty, the new commit will become the repo&#39;s root commit and also define the repo&#39;s main branch going forward.  This API cannot be used to create additional root commits in non-empty repos.  The branch field cannot be repeated.  As a side effect, this API can be used to create a new branch without modifying any files, by specifying a new branch name in this field, together with &#x60;parents&#x60;, but omitting the &#x60;files&#x60; fields, while not sending any files. This will create a new commit and branch with the same contents as the first parent. The diff of this commit against its first parent will be empty. 
 
 
 */
-
-type RepositoriesUsernameRepoSlugSrcPostOpts struct { 
-	Message optional.String
-	Author optional.String
-	Parents optional.String
-	Files optional.String
-	Files optional.String
-	Branch optional.String
-}
-
-func (a *RepositoriesApiService) RepositoriesUsernameRepoSlugSrcPost(ctx context.Context, username string, repoSlug string, localVarOptionals *RepositoriesUsernameRepoSlugSrcPostOpts) (*http.Response, error) {
+func (a *RepositoriesApiService) RepositoriesUsernameRepoSlugSrcPost(ctx context.Context, username string, repoSlug string, message string, author string, parents string, files string, files2 string, branch string) (*http.Response, error) {
 	var (
 		localVarHttpMethod = strings.ToUpper("Post")
 		localVarPostBody   interface{}
@@ -2714,24 +2574,12 @@ func (a *RepositoriesApiService) RepositoriesUsernameRepoSlugSrcPost(ctx context
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
-	if localVarOptionals != nil && localVarOptionals.Message.IsSet() {
-		localVarQueryParams.Add("message", parameterToString(localVarOptionals.Message.Value(), ""))
-	}
-	if localVarOptionals != nil && localVarOptionals.Author.IsSet() {
-		localVarQueryParams.Add("author", parameterToString(localVarOptionals.Author.Value(), ""))
-	}
-	if localVarOptionals != nil && localVarOptionals.Parents.IsSet() {
-		localVarQueryParams.Add("parents", parameterToString(localVarOptionals.Parents.Value(), ""))
-	}
-	if localVarOptionals != nil && localVarOptionals.Files.IsSet() {
-		localVarQueryParams.Add("files", parameterToString(localVarOptionals.Files.Value(), ""))
-	}
-	if localVarOptionals != nil && localVarOptionals.Files.IsSet() {
-		localVarQueryParams.Add("files", parameterToString(localVarOptionals.Files.Value(), ""))
-	}
-	if localVarOptionals != nil && localVarOptionals.Branch.IsSet() {
-		localVarQueryParams.Add("branch", parameterToString(localVarOptionals.Branch.Value(), ""))
-	}
+	localVarQueryParams.Add("message", parameterToString(message, ""))
+	localVarQueryParams.Add("author", parameterToString(author, ""))
+	localVarQueryParams.Add("parents", parameterToString(parents, ""))
+	localVarQueryParams.Add("files", parameterToString(files, ""))
+	localVarQueryParams.Add("files", parameterToString(files2, ""))
+	localVarQueryParams.Add("branch", parameterToString(branch, ""))
 	// to determine the Content-Type header
 	localVarHttpContentTypes := []string{"application/json"}
 
@@ -2892,19 +2740,12 @@ func (a *RepositoriesApiService) RepositoriesUsernameRepoSlugWatchersGet(ctx con
 RepositoriesApiService
 Returns an object for each repository the caller has explicit access to and their effective permission — the highest level of permission the caller has. This does not return public repositories that the user was not granted any specific permission in, and does not distinguish between direct and indirect privileges.  Permissions can be:  * &#x60;admin&#x60; * &#x60;write&#x60; * &#x60;read&#x60;  Example:  &#x60;&#x60;&#x60; $ curl https://api.bitbucket.org/2.0/user/permissions/repositories  {   \&quot;pagelen\&quot;: 10,   \&quot;values\&quot;: [     {       \&quot;type\&quot;: \&quot;repository_permission\&quot;,       \&quot;user\&quot;: {         \&quot;type\&quot;: \&quot;user\&quot;,         \&quot;username\&quot;: \&quot;evzijst\&quot;,         \&quot;nickname\&quot;: \&quot;evzijst\&quot;,         \&quot;display_name\&quot;: \&quot;Erik van Zijst\&quot;,         \&quot;uuid\&quot;: \&quot;{d301aafa-d676-4ee0-88be-962be7417567}\&quot;       },       \&quot;repository\&quot;: {         \&quot;type\&quot;: \&quot;repository\&quot;,         \&quot;name\&quot;: \&quot;geordi\&quot;,         \&quot;full_name\&quot;: \&quot;bitbucket/geordi\&quot;,         \&quot;uuid\&quot;: \&quot;{85d08b4e-571d-44e9-a507-fa476535aa98}\&quot;       },       \&quot;permission\&quot;: \&quot;admin\&quot;     }   ],   \&quot;page\&quot;: 1,   \&quot;size\&quot;: 1 } &#x60;&#x60;&#x60;  Results may be further [filtered or sorted](../../../meta/filtering) by repository or permission by adding the following query string parameters:  * &#x60;q&#x3D;repository.name&#x3D;\&quot;geordi\&quot;&#x60; or &#x60;q&#x3D;permission&gt;\&quot;read\&quot;&#x60; * &#x60;sort&#x3D;repository.name&#x60;  Note that the query parameter values need to be URL escaped so that &#x60;&#x3D;&#x60; would become &#x60;%3D&#x60;.
  * @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- * @param optional nil or *UserPermissionsRepositoriesGetOpts - Optional Parameters:
-     * @param "Q" (optional.String) -   Query string to narrow down the response as per [filtering and sorting](../../../meta/filtering).
-     * @param "Sort" (optional.String) -   Name of a response property sort the result by as per [filtering and sorting](../../../meta/filtering#query-sort). 
+ * @param q  Query string to narrow down the response as per [filtering and sorting](../../../meta/filtering).
+ * @param sort  Name of a response property sort the result by as per [filtering and sorting](../../../meta/filtering#query-sort). 
 
 @return PaginatedRepositoryPermissions
 */
-
-type UserPermissionsRepositoriesGetOpts struct { 
-	Q optional.String
-	Sort optional.String
-}
-
-func (a *RepositoriesApiService) UserPermissionsRepositoriesGet(ctx context.Context, localVarOptionals *UserPermissionsRepositoriesGetOpts) (PaginatedRepositoryPermissions, *http.Response, error) {
+func (a *RepositoriesApiService) UserPermissionsRepositoriesGet(ctx context.Context, q string, sort string) (PaginatedRepositoryPermissions, *http.Response, error) {
 	var (
 		localVarHttpMethod = strings.ToUpper("Get")
 		localVarPostBody   interface{}
@@ -2920,12 +2761,8 @@ func (a *RepositoriesApiService) UserPermissionsRepositoriesGet(ctx context.Cont
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
-	if localVarOptionals != nil && localVarOptionals.Q.IsSet() {
-		localVarQueryParams.Add("q", parameterToString(localVarOptionals.Q.Value(), ""))
-	}
-	if localVarOptionals != nil && localVarOptionals.Sort.IsSet() {
-		localVarQueryParams.Add("sort", parameterToString(localVarOptionals.Sort.Value(), ""))
-	}
+	localVarQueryParams.Add("q", parameterToString(q, ""))
+	localVarQueryParams.Add("sort", parameterToString(sort, ""))
 	// to determine the Content-Type header
 	localVarHttpContentTypes := []string{"application/json"}
 

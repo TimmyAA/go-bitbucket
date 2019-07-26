@@ -31,17 +31,11 @@ type SnippetsApiService service
 SnippetsApiService
 Returns all snippets. Like pull requests, repositories and teams, the full set of snippets is defined by what the current user has access to.  This includes all snippets owned by the current user, but also all snippets owned by any of the teams the user is a member of, or snippets by other users that the current user is either watching or has collaborated on (for instance by commenting on it).  To limit the set of returned snippets, apply the &#x60;?role&#x3D;[owner|contributor|member]&#x60; query parameter where the roles are defined as follows:  * &#x60;owner&#x60;: all snippets owned by the current user * &#x60;contributor&#x60;: all snippets owned by, or watched by the current user * &#x60;member&#x60;: owned by the user, their teams, or watched by the current user  When no role is specified, all public snippets are returned, as well as all privately owned snippets watched or commented on.  The returned response is a normal paginated JSON list. This endpoint only supports &#x60;application/json&#x60; responses and no &#x60;multipart/form-data&#x60; or &#x60;multipart/related&#x60;. As a result, it is not possible to include the file contents.
  * @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- * @param optional nil or *SnippetsGetOpts - Optional Parameters:
-     * @param "Role" (optional.String) -  Filter down the result based on the authenticated user&#39;s role (&#x60;owner&#x60;, &#x60;contributor&#x60;, or &#x60;member&#x60;).
+ * @param role Filter down the result based on the authenticated user&#39;s role (&#x60;owner&#x60;, &#x60;contributor&#x60;, or &#x60;member&#x60;).
 
 @return PaginatedSnippets
 */
-
-type SnippetsGetOpts struct { 
-	Role optional.String
-}
-
-func (a *SnippetsApiService) SnippetsGet(ctx context.Context, localVarOptionals *SnippetsGetOpts) (PaginatedSnippets, *http.Response, error) {
+func (a *SnippetsApiService) SnippetsGet(ctx context.Context, role string) (PaginatedSnippets, *http.Response, error) {
 	var (
 		localVarHttpMethod = strings.ToUpper("Get")
 		localVarPostBody   interface{}
@@ -57,9 +51,7 @@ func (a *SnippetsApiService) SnippetsGet(ctx context.Context, localVarOptionals 
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
-	if localVarOptionals != nil && localVarOptionals.Role.IsSet() {
-		localVarQueryParams.Add("role", parameterToString(localVarOptionals.Role.Value(), ""))
-	}
+	localVarQueryParams.Add("role", parameterToString(role, ""))
 	// to determine the Content-Type header
 	localVarHttpContentTypes := []string{"application/json"}
 
@@ -2761,18 +2753,12 @@ func (a *SnippetsApiService) SnippetsUsernameEncodedIdWatchersGet(ctx context.Co
 SnippetsApiService
 Identical to &#x60;/snippets&#x60;, except that the result is further filtered by the snippet owner and only those that are owned by &#x60;{username}&#x60; are returned.
  * @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ * @param role Filter down the result based on the authenticated user&#39;s role (&#x60;owner&#x60;, &#x60;contributor&#x60;, or &#x60;member&#x60;).
  * @param username Limits the result to snippets owned by this user.
- * @param optional nil or *SnippetsUsernameGetOpts - Optional Parameters:
-     * @param "Role" (optional.String) -  Filter down the result based on the authenticated user&#39;s role (&#x60;owner&#x60;, &#x60;contributor&#x60;, or &#x60;member&#x60;).
 
 @return PaginatedSnippets
 */
-
-type SnippetsUsernameGetOpts struct { 
-	Role optional.String
-}
-
-func (a *SnippetsApiService) SnippetsUsernameGet(ctx context.Context, username string, localVarOptionals *SnippetsUsernameGetOpts) (PaginatedSnippets, *http.Response, error) {
+func (a *SnippetsApiService) SnippetsUsernameGet(ctx context.Context, role string, username string) (PaginatedSnippets, *http.Response, error) {
 	var (
 		localVarHttpMethod = strings.ToUpper("Get")
 		localVarPostBody   interface{}
@@ -2789,9 +2775,7 @@ func (a *SnippetsApiService) SnippetsUsernameGet(ctx context.Context, username s
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
-	if localVarOptionals != nil && localVarOptionals.Role.IsSet() {
-		localVarQueryParams.Add("role", parameterToString(localVarOptionals.Role.Value(), ""))
-	}
+	localVarQueryParams.Add("role", parameterToString(role, ""))
 	// to determine the Content-Type header
 	localVarHttpContentTypes := []string{"application/json"}
 

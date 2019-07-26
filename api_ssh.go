@@ -367,17 +367,11 @@ SshApiService
 Adds a new SSH public key to the specified user account and returns the resulting key.  Example: &#x60;&#x60;&#x60; $ curl -X POST -H \&quot;Content-Type: application/json\&quot; -d &#39;{\&quot;key\&quot;: \&quot;ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKqP3Cr632C2dNhhgKVcon4ldUSAeKiku2yP9O9/bDtY user@myhost\&quot;}&#39; https://api.bitbucket.org/2.0/users/markadams-atl/ssh-keys  {     \&quot;comment\&quot;: \&quot;user@myhost\&quot;,     \&quot;created_on\&quot;: \&quot;2018-03-14T13:17:05.196003+00:00\&quot;,     \&quot;key\&quot;: \&quot;ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKqP3Cr632C2dNhhgKVcon4ldUSAeKiku2yP9O9/bDtY\&quot;,     \&quot;label\&quot;: \&quot;\&quot;,     \&quot;last_used\&quot;: \&quot;2018-03-20T13:18:05.196003+00:00\&quot;,     \&quot;links\&quot;: {         \&quot;self\&quot;: {             \&quot;href\&quot;: \&quot;https://api.bitbucket.org/2.0/users/markadams-atl/ssh-keys/b15b6026-9c02-4626-b4ad-b905f99f763a\&quot;         }     },     \&quot;owner\&quot;: {         \&quot;display_name\&quot;: \&quot;Mark Adams\&quot;,         \&quot;links\&quot;: {             \&quot;avatar\&quot;: {                 \&quot;href\&quot;: \&quot;https://bitbucket.org/account/markadams-atl/avatar/32/\&quot;             },             \&quot;html\&quot;: {                 \&quot;href\&quot;: \&quot;https://bitbucket.org/markadams-atl/\&quot;             },             \&quot;self\&quot;: {                 \&quot;href\&quot;: \&quot;https://api.bitbucket.org/2.0/users/markadams-atl\&quot;             }         },         \&quot;type\&quot;: \&quot;user\&quot;,         \&quot;username\&quot;: \&quot;markadams-atl\&quot;,         \&quot;nickname\&quot;: \&quot;markadams-atl\&quot;,         \&quot;uuid\&quot;: \&quot;{d7dd0e2d-3994-4a50-a9ee-d260b6cefdab}\&quot;     },     \&quot;type\&quot;: \&quot;ssh_key\&quot;,     \&quot;uuid\&quot;: \&quot;{b15b6026-9c02-4626-b4ad-b905f99f763a}\&quot; } &#x60;&#x60;&#x60;
  * @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param username The account&#39;s UUID, account_id, or username. Note that username has been deprecated due to [privacy changes](https://developer.atlassian.com/cloud/bitbucket/bitbucket-api-changes-gdpr/#removal-of-usernames-from-user-referencing-apis).
- * @param optional nil or *UsersUsernameSshKeysPostOpts - Optional Parameters:
-     * @param "Body" (optional.Interface of SshAccountKey) -  The new SSH key object. Note that the username property has been deprecated due to [privacy changes](https://developer.atlassian.com/cloud/bitbucket/bitbucket-api-changes-gdpr/#removal-of-usernames-from-user-referencing-apis).
+ * @param body The new SSH key object. Note that the username property has been deprecated due to [privacy changes](https://developer.atlassian.com/cloud/bitbucket/bitbucket-api-changes-gdpr/#removal-of-usernames-from-user-referencing-apis).
 
 @return SshAccountKey
 */
-
-type UsersUsernameSshKeysPostOpts struct { 
-	Body optional.Interface
-}
-
-func (a *SshApiService) UsersUsernameSshKeysPost(ctx context.Context, username string, localVarOptionals *UsersUsernameSshKeysPostOpts) (SshAccountKey, *http.Response, error) {
+func (a *SshApiService) UsersUsernameSshKeysPost(ctx context.Context, username string, body SshAccountKey) (SshAccountKey, *http.Response, error) {
 	var (
 		localVarHttpMethod = strings.ToUpper("Post")
 		localVarPostBody   interface{}
@@ -412,14 +406,7 @@ func (a *SshApiService) UsersUsernameSshKeysPost(ctx context.Context, username s
 		localVarHeaderParams["Accept"] = localVarHttpHeaderAccept
 	}
 	// body params
-	if localVarOptionals != nil && localVarOptionals.Body.IsSet() {
-		
-		localVarOptionalBody, localVarOptionalBodyok := localVarOptionals.Body.Value().(SshAccountKey)
-		if !localVarOptionalBodyok {
-				return localVarReturnValue, nil, reportError("body should be SshAccountKey")
-		}
-		localVarPostBody = &localVarOptionalBody
-	}
+	localVarPostBody = &body
 	if ctx != nil {
 		// API Key Authentication
 		if auth, ok := ctx.Value(ContextAPIKey).(APIKey); ok {
@@ -508,17 +495,11 @@ Updates a specific SSH public key on a user&#39;s account  Note: Only the &#39;c
  * @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param username The account&#39;s username or UUID.
  * @param keyId The SSH key&#39;s UUID value.
- * @param optional nil or *UsersUsernameSshKeysPutOpts - Optional Parameters:
-     * @param "Body" (optional.Interface of SshAccountKey) -  The updated SSH key object
+ * @param body The updated SSH key object
 
 @return SshAccountKey
 */
-
-type UsersUsernameSshKeysPutOpts struct { 
-	Body optional.Interface
-}
-
-func (a *SshApiService) UsersUsernameSshKeysPut(ctx context.Context, username string, keyId string, localVarOptionals *UsersUsernameSshKeysPutOpts) (SshAccountKey, *http.Response, error) {
+func (a *SshApiService) UsersUsernameSshKeysPut(ctx context.Context, username string, keyId string, body SshAccountKey) (SshAccountKey, *http.Response, error) {
 	var (
 		localVarHttpMethod = strings.ToUpper("Put")
 		localVarPostBody   interface{}
@@ -554,14 +535,7 @@ func (a *SshApiService) UsersUsernameSshKeysPut(ctx context.Context, username st
 		localVarHeaderParams["Accept"] = localVarHttpHeaderAccept
 	}
 	// body params
-	if localVarOptionals != nil && localVarOptionals.Body.IsSet() {
-		
-		localVarOptionalBody, localVarOptionalBodyok := localVarOptionals.Body.Value().(SshAccountKey)
-		if !localVarOptionalBodyok {
-				return localVarReturnValue, nil, reportError("body should be SshAccountKey")
-		}
-		localVarPostBody = &localVarOptionalBody
-	}
+	localVarPostBody = &body
 	if ctx != nil {
 		// API Key Authentication
 		if auth, ok := ctx.Value(ContextAPIKey).(APIKey); ok {

@@ -277,7 +277,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **RepositoriesUsernameRepoSlugIssuesIssueIdChangesGet**
-> PaginatedLogEntries RepositoriesUsernameRepoSlugIssuesIssueIdChangesGet(ctx, username, issueId, repoSlug, optional)
+> PaginatedLogEntries RepositoriesUsernameRepoSlugIssuesIssueIdChangesGet(ctx, username, issueId, repoSlug, q, sort)
 
 
 Returns the list of all changes that have been made to the specified issue. Changes are returned in chronological order with the oldest change first.  Each time an issue is edited in the UI or through the API, an immutable change record is created under the `/issues/123/changes` endpoint. It also has a comment associated with the change.  Note that this operation is changing significantly, due to privacy changes. See the [announcement](https://developer.atlassian.com/cloud/bitbucket/bitbucket-api-changes-gdpr/#changes-to-the-issue-changes-api) for details.  ``` $ curl -s https://api.bitbucket.org/2.0/repositories/evzijst/dogslow/issues/1/changes - | jq .  {   \"pagelen\": 20,   \"values\": [     {       \"changes\": {         \"priority\": {           \"new\": \"trivial\",           \"old\": \"major\"         },         \"assignee\": {           \"new\": \"\",           \"old\": \"evzijst\"         },         \"assignee_account_id\": {           \"new\": \"\",           \"old\": \"557058:c0b72ad0-1cb5-4018-9cdc-0cde8492c443\"         },         \"kind\": {           \"new\": \"enhancement\",           \"old\": \"bug\"         }       },       \"links\": {         \"self\": {           \"href\": \"https://api.bitbucket.org/2.0/repositories/evzijst/dogslow/issues/1/changes/2\"         },         \"html\": {           \"href\": \"https://bitbucket.org/evzijst/dogslow/issues/1#comment-2\"         }       },       \"issue\": {         \"links\": {           \"self\": {             \"href\": \"https://api.bitbucket.org/2.0/repositories/evzijst/dogslow/issues/1\"           }         },         \"type\": \"issue\",         \"id\": 1,         \"repository\": {           \"links\": {             \"self\": {               \"href\": \"https://api.bitbucket.org/2.0/repositories/evzijst/dogslow\"             },             \"html\": {               \"href\": \"https://bitbucket.org/evzijst/dogslow\"             },             \"avatar\": {               \"href\": \"https://bitbucket.org/evzijst/dogslow/avatar/32/\"             }           },           \"type\": \"repository\",           \"name\": \"dogslow\",           \"full_name\": \"evzijst/dogslow\",           \"uuid\": \"{988b17c6-1a47-4e70-84ee-854d5f012bf6}\"         },         \"title\": \"Updated title\"       },       \"created_on\": \"2018-03-03T00:35:28.353630+00:00\",       \"user\": {         \"username\": \"evzijst\",         \"nickname\": \"evzijst\",         \"display_name\": \"evzijst\",         \"type\": \"user\",         \"uuid\": \"{aaa7972b-38af-4fb1-802d-6e3854c95778}\",         \"links\": {           \"self\": {             \"href\": \"https://api.bitbucket.org/2.0/users/evzijst\"           },           \"html\": {             \"href\": \"https://bitbucket.org/evzijst/\"           },           \"avatar\": {             \"href\": \"https://bitbucket.org/account/evzijst/avatar/32/\"           }         }       },       \"message\": {         \"raw\": \"Removed assignee, changed kind and priority.\",         \"markup\": \"markdown\",         \"html\": \"<p>Removed assignee, changed kind and priority.</p>\",         \"type\": \"rendered\"       },       \"type\": \"issue_change\",       \"id\": 2     }   ],   \"page\": 1 } ```  Changes support [filtering and sorting](../../../meta/filtering) that can be used to search for specific changes. For instance, to see when an issue transitioned to \"resolved\":  ``` $ curl -s https://api.bitbucket.org/2.0/repositories/site/master/issues/1/changes \\    -G --data-urlencode='q=changes.state.new = \"resolved\"' ```  This resource is only available on repositories that have the issue tracker enabled.  N.B.  The `changes.assignee` and `changes.assignee_account_id` fields are not a `user` object. Instead, they contain the raw `username` and `account_id` of the user. This is to protect the integrity of the audit log even after a user account gets deleted.  The `changes.assignee` field is deprecated will disappear in the future. Use `changes.assignee_account_id` instead.
@@ -290,18 +290,8 @@ Name | Type | Description  | Notes
   **username** | **string**| This can either be the username or the UUID of the account, surrounded by curly-braces, for example: &#x60;{account UUID}&#x60;. An account is either a team or user.  | 
   **issueId** | **string**| The issue id | 
   **repoSlug** | **string**| This can either be the repository slug or the UUID of the repository, surrounded by curly-braces, for example: &#x60;{repository UUID}&#x60;.  | 
- **optional** | ***RepositoriesUsernameRepoSlugIssuesIssueIdChangesGetOpts** | optional parameters | nil if no parameters
-
-### Optional Parameters
-Optional parameters are passed through a pointer to a RepositoriesUsernameRepoSlugIssuesIssueIdChangesGetOpts struct
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
-
-
-
- **q** | **optional.String**|  Query string to narrow down the response. See [filtering and sorting](../../../meta/filtering) for details. | 
- **sort** | **optional.String**|  Name of a response property to sort results. See [filtering and sorting](../../../meta/filtering#query-sort) for details.  | 
+  **q** | **string**|  Query string to narrow down the response. See [filtering and sorting](../../../meta/filtering) for details. | 
+  **sort** | **string**|  Name of a response property to sort results. See [filtering and sorting](../../../meta/filtering#query-sort) for details.  | 
 
 ### Return type
 
@@ -445,7 +435,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **RepositoriesUsernameRepoSlugIssuesIssueIdCommentsGet**
-> PaginatedIssueComments RepositoriesUsernameRepoSlugIssuesIssueIdCommentsGet(ctx, issueId, username, repoSlug, optional)
+> PaginatedIssueComments RepositoriesUsernameRepoSlugIssuesIssueIdCommentsGet(ctx, issueId, username, repoSlug, q)
 
 
 Returns a paginated list of all comments that were made on the specified issue.  The default sorting is oldest to newest and can be overridden with the `sort` query parameter.  This endpoint also supports filtering and sorting of the results. See [filtering and sorting](../../../../../../meta/filtering) for more details.
@@ -458,17 +448,7 @@ Name | Type | Description  | Notes
   **issueId** | **string**|  | 
   **username** | **string**| This can either be the username or the UUID of the user, surrounded by curly-braces, for example: &#x60;{user UUID}&#x60;.  | 
   **repoSlug** | **string**| This can either be the repository slug or the UUID of the repository, surrounded by curly-braces, for example: &#x60;{repository UUID}&#x60;.  | 
- **optional** | ***RepositoriesUsernameRepoSlugIssuesIssueIdCommentsGetOpts** | optional parameters | nil if no parameters
-
-### Optional Parameters
-Optional parameters are passed through a pointer to a RepositoriesUsernameRepoSlugIssuesIssueIdCommentsGetOpts struct
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
-
-
-
- **q** | **optional.String**|  Query string to narrow down the response as per [filtering and sorting](../../../../../../meta/filtering). | 
+  **q** | **string**|  Query string to narrow down the response as per [filtering and sorting](../../../../../../meta/filtering). | 
 
 ### Return type
 

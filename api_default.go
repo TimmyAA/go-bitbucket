@@ -17,7 +17,6 @@ import (
 	"net/url"
 	"strings"
 	"fmt"
-	"github.com/antihax/optional"
 )
 
 // Linger please
@@ -31,20 +30,14 @@ type DefaultApiService service
 DefaultApiService
 Returns the diff stat for the specified commit.  Diff stat responses contain a record for every path modified by the commit and lists the number of lines added and removed for each file.   Example: &#x60;&#x60;&#x60; curl https://api.bitbucket.org/2.0/repositories/bitbucket/geordi/diffstat/d222fa2..e174964 {     \&quot;pagelen\&quot;: 500,     \&quot;values\&quot;: [         {             \&quot;type\&quot;: \&quot;diffstat\&quot;,             \&quot;status\&quot;: \&quot;modified\&quot;,             \&quot;lines_removed\&quot;: 1,             \&quot;lines_added\&quot;: 2,             \&quot;old\&quot;: {                 \&quot;path\&quot;: \&quot;setup.py\&quot;,                 \&quot;type\&quot;: \&quot;commit_file\&quot;,                 \&quot;links\&quot;: {                     \&quot;self\&quot;: {                         \&quot;href\&quot;: \&quot;https://api.bitbucket.org/2.0/repositories/bitbucket/geordi/src/e1749643d655d7c7014001a6c0f58abaf42ad850/setup.py\&quot;                     }                 }             },             \&quot;new\&quot;: {                 \&quot;path\&quot;: \&quot;setup.py\&quot;,                 \&quot;type\&quot;: \&quot;commit_file\&quot;,                 \&quot;links\&quot;: {                     \&quot;self\&quot;: {                         \&quot;href\&quot;: \&quot;https://api.bitbucket.org/2.0/repositories/bitbucket/geordi/src/d222fa235229c55dad20b190b0b571adf737d5a6/setup.py\&quot;                     }                 }             }         }     ],     \&quot;page\&quot;: 1,     \&quot;size\&quot;: 1 } &#x60;&#x60;&#x60;
  * @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ * @param ignoreWhitespace Generate diffs that ignore whitespace
  * @param username This can either be the username or the UUID of the account, surrounded by curly-braces, for example: &#x60;{account UUID}&#x60;. An account is either a team or user. 
  * @param repoSlug This can either be the repository slug or the UUID of the repository, surrounded by curly-braces, for example: &#x60;{repository UUID}&#x60;. 
  * @param spec A commit SHA (e.g. &#x60;3a8b42&#x60;) or a commit range using double dot notation (e.g. &#x60;3a8b42..9ff173&#x60;). 
- * @param optional nil or *RepositoriesUsernameRepoSlugDiffstatSpecGetOpts - Optional Parameters:
-     * @param "IgnoreWhitespace" (optional.Bool) -  Generate diffs that ignore whitespace
 
 @return PaginatedDiffstats
 */
-
-type RepositoriesUsernameRepoSlugDiffstatSpecGetOpts struct { 
-	IgnoreWhitespace optional.Bool
-}
-
-func (a *DefaultApiService) RepositoriesUsernameRepoSlugDiffstatSpecGet(ctx context.Context, username string, repoSlug string, spec string, localVarOptionals *RepositoriesUsernameRepoSlugDiffstatSpecGetOpts) (PaginatedDiffstats, *http.Response, error) {
+func (a *DefaultApiService) RepositoriesUsernameRepoSlugDiffstatSpecGet(ctx context.Context, ignoreWhitespace bool, username string, repoSlug string, spec string) (PaginatedDiffstats, *http.Response, error) {
 	var (
 		localVarHttpMethod = strings.ToUpper("Get")
 		localVarPostBody   interface{}
@@ -63,9 +56,7 @@ func (a *DefaultApiService) RepositoriesUsernameRepoSlugDiffstatSpecGet(ctx cont
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
-	if localVarOptionals != nil && localVarOptionals.IgnoreWhitespace.IsSet() {
-		localVarQueryParams.Add("ignore_whitespace", parameterToString(localVarOptionals.IgnoreWhitespace.Value(), ""))
-	}
+	localVarQueryParams.Add("ignore_whitespace", parameterToString(ignoreWhitespace, ""))
 	// to determine the Content-Type header
 	localVarHttpContentTypes := []string{"application/json"}
 
@@ -1112,19 +1103,12 @@ DefaultApiService
 Returns an object for each team permission a user on the team has.  Permissions returned are effective permissions — if a user is a member of multiple groups with distinct roles, only the highest level is returned.  Permissions can be:  * &#x60;admin&#x60; * &#x60;collaborator&#x60;  Only users with admin permission for the team may access this resource.  Example:  &#x60;&#x60;&#x60; $ curl https://api.bitbucket.org/2.0/teams/atlassian_tutorial/permissions  {   \&quot;pagelen\&quot;: 10,   \&quot;values\&quot;: [     {       \&quot;permission\&quot;: \&quot;admin\&quot;,       \&quot;type\&quot;: \&quot;team_permission\&quot;,       \&quot;user\&quot;: {         \&quot;type\&quot;: \&quot;user\&quot;,         \&quot;username\&quot;: \&quot;evzijst\&quot;,         \&quot;nickname\&quot;: \&quot;evzijst\&quot;,         \&quot;display_name\&quot;: \&quot;Erik van Zijst\&quot;,         \&quot;uuid\&quot;: \&quot;{d301aafa-d676-4ee0-88be-962be7417567}\&quot;       },       \&quot;team\&quot;: {         \&quot;username\&quot;: \&quot;bitbucket\&quot;,         \&quot;display_name\&quot;: \&quot;Atlassian Bitbucket\&quot;,         \&quot;uuid\&quot;: \&quot;{4cc6108a-a241-4db0-96a5-64347ac04f87}\&quot;       }     },     {       \&quot;permission\&quot;: \&quot;collaborator\&quot;,       \&quot;type\&quot;: \&quot;team_permission\&quot;,       \&quot;user\&quot;: {         \&quot;type\&quot;: \&quot;user\&quot;,         \&quot;username\&quot;: \&quot;seanaty\&quot;,         \&quot;nickname\&quot;: \&quot;seanaty\&quot;,         \&quot;display_name\&quot;: \&quot;Sean Conaty\&quot;,         \&quot;uuid\&quot;: \&quot;{504c3b62-8120-4f0c-a7bc-87800b9d6f70}\&quot;       },       \&quot;team\&quot;: {         \&quot;username\&quot;: \&quot;bitbucket\&quot;,         \&quot;display_name\&quot;: \&quot;Atlassian Bitbucket\&quot;,         \&quot;uuid\&quot;: \&quot;{4cc6108a-a241-4db0-96a5-64347ac04f87}\&quot;       }     }   ],   \&quot;page\&quot;: 1,   \&quot;size\&quot;: 2 } &#x60;&#x60;&#x60;  Results may be further [filtered or sorted](../../../meta/filtering) by team, user, or permission by adding the following query string parameters:  * &#x60;q&#x3D;user.username&#x3D;\&quot;evzijst\&quot;&#x60; or &#x60;q&#x3D;permission&#x3D;\&quot;admin\&quot;&#x60; * &#x60;sort&#x3D;team.display_name&#x60;  Note that the query parameter values need to be URL escaped so that &#x60;&#x3D;&#x60; would become &#x60;%3D&#x60;.
  * @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param username This can either be the username or the UUID of the account, surrounded by curly-braces, for example: &#x60;{account UUID}&#x60;. An account is either a team or user. 
- * @param optional nil or *TeamsUsernamePermissionsGetOpts - Optional Parameters:
-     * @param "Q" (optional.String) -   Query string to narrow down the response as per [filtering and sorting](../../../meta/filtering).
-     * @param "Sort" (optional.String) -   Name of a response property sort the result by as per [filtering and sorting](../../../meta/filtering#query-sort). 
+ * @param q  Query string to narrow down the response as per [filtering and sorting](../../../meta/filtering).
+ * @param sort  Name of a response property sort the result by as per [filtering and sorting](../../../meta/filtering#query-sort). 
 
 @return PaginatedTeamPermissions
 */
-
-type TeamsUsernamePermissionsGetOpts struct { 
-	Q optional.String
-	Sort optional.String
-}
-
-func (a *DefaultApiService) TeamsUsernamePermissionsGet(ctx context.Context, username string, localVarOptionals *TeamsUsernamePermissionsGetOpts) (PaginatedTeamPermissions, *http.Response, error) {
+func (a *DefaultApiService) TeamsUsernamePermissionsGet(ctx context.Context, username string, q string, sort string) (PaginatedTeamPermissions, *http.Response, error) {
 	var (
 		localVarHttpMethod = strings.ToUpper("Get")
 		localVarPostBody   interface{}
@@ -1141,12 +1125,8 @@ func (a *DefaultApiService) TeamsUsernamePermissionsGet(ctx context.Context, use
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
-	if localVarOptionals != nil && localVarOptionals.Q.IsSet() {
-		localVarQueryParams.Add("q", parameterToString(localVarOptionals.Q.Value(), ""))
-	}
-	if localVarOptionals != nil && localVarOptionals.Sort.IsSet() {
-		localVarQueryParams.Add("sort", parameterToString(localVarOptionals.Sort.Value(), ""))
-	}
+	localVarQueryParams.Add("q", parameterToString(q, ""))
+	localVarQueryParams.Add("sort", parameterToString(sort, ""))
 	// to determine the Content-Type header
 	localVarHttpContentTypes := []string{"application/json"}
 
@@ -1240,19 +1220,12 @@ DefaultApiService
 Returns an object for each repository permission for all of a team’s repositories.  If the username URL parameter refers to a user account instead of a team account, an object containing the repository permissions of all the username&#39;s repositories will be returned.  Permissions returned are effective permissions — the highest level of permission the user has. This does not include public repositories that users are not granted any specific permission in, and does not distinguish between direct and indirect privileges.  Only users with admin permission for the team may access this resource.  Permissions can be:  * &#x60;admin&#x60; * &#x60;write&#x60; * &#x60;read&#x60;  Example:  &#x60;&#x60;&#x60; $ curl https://api.bitbucket.org/2.0/teams/atlassian_tutorial/permissions/repositories  {   \&quot;pagelen\&quot;: 10,   \&quot;values\&quot;: [     {       \&quot;type\&quot;: \&quot;repository_permission\&quot;,       \&quot;user\&quot;: {         \&quot;type\&quot;: \&quot;user\&quot;,         \&quot;username\&quot;: \&quot;evzijst\&quot;,         \&quot;display_name\&quot;: \&quot;Erik van Zijst\&quot;,         \&quot;uuid\&quot;: \&quot;{d301aafa-d676-4ee0-88be-962be7417567}\&quot;       },       \&quot;repository\&quot;: {         \&quot;type\&quot;: \&quot;repository\&quot;,         \&quot;name\&quot;: \&quot;geordi\&quot;,         \&quot;full_name\&quot;: \&quot;bitbucket/geordi\&quot;,         \&quot;uuid\&quot;: \&quot;{85d08b4e-571d-44e9-a507-fa476535aa98}\&quot;       },       \&quot;permission\&quot;: \&quot;admin\&quot;     },     {       \&quot;type\&quot;: \&quot;repository_permission\&quot;,       \&quot;user\&quot;: {         \&quot;type\&quot;: \&quot;user\&quot;,         \&quot;username\&quot;: \&quot;seanaty\&quot;,         \&quot;display_name\&quot;: \&quot;Sean Conaty\&quot;,         \&quot;uuid\&quot;: \&quot;{504c3b62-8120-4f0c-a7bc-87800b9d6f70}\&quot;       },       \&quot;repository\&quot;: {         \&quot;type\&quot;: \&quot;repository\&quot;,         \&quot;name\&quot;: \&quot;geordi\&quot;,         \&quot;full_name\&quot;: \&quot;bitbucket/geordi\&quot;,         \&quot;uuid\&quot;: \&quot;{85d08b4e-571d-44e9-a507-fa476535aa98}\&quot;       },       \&quot;permission\&quot;: \&quot;write\&quot;     }   ],   \&quot;page\&quot;: 1,   \&quot;size\&quot;: 2 } &#x60;&#x60;&#x60;  Results may be further [filtered or sorted](../../../../meta/filtering) by repository, user, or permission by adding the following query string parameters:  * &#x60;q&#x3D;repository.name&#x3D;\&quot;geordi\&quot;&#x60; or &#x60;q&#x3D;permission&gt;\&quot;read\&quot;&#x60; * &#x60;sort&#x3D;user.display_name&#x60;  Note that the query parameter values need to be URL escaped so that &#x60;&#x3D;&#x60; would become &#x60;%3D&#x60;.
  * @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param username This can either be the username or the UUID of the account, surrounded by curly-braces, for example: &#x60;{account UUID}&#x60;. An account is either a team or user. 
- * @param optional nil or *TeamsUsernamePermissionsRepositoriesGetOpts - Optional Parameters:
-     * @param "Q" (optional.String) -   Query string to narrow down the response as per [filtering and sorting](../../../../meta/filtering).
-     * @param "Sort" (optional.String) -   Name of a response property sort the result by as per [filtering and sorting](../../../../meta/filtering#query-sort). 
+ * @param q  Query string to narrow down the response as per [filtering and sorting](../../../../meta/filtering).
+ * @param sort  Name of a response property sort the result by as per [filtering and sorting](../../../../meta/filtering#query-sort). 
 
 @return PaginatedRepositoryPermissions
 */
-
-type TeamsUsernamePermissionsRepositoriesGetOpts struct { 
-	Q optional.String
-	Sort optional.String
-}
-
-func (a *DefaultApiService) TeamsUsernamePermissionsRepositoriesGet(ctx context.Context, username string, localVarOptionals *TeamsUsernamePermissionsRepositoriesGetOpts) (PaginatedRepositoryPermissions, *http.Response, error) {
+func (a *DefaultApiService) TeamsUsernamePermissionsRepositoriesGet(ctx context.Context, username string, q string, sort string) (PaginatedRepositoryPermissions, *http.Response, error) {
 	var (
 		localVarHttpMethod = strings.ToUpper("Get")
 		localVarPostBody   interface{}
@@ -1269,12 +1242,8 @@ func (a *DefaultApiService) TeamsUsernamePermissionsRepositoriesGet(ctx context.
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
-	if localVarOptionals != nil && localVarOptionals.Q.IsSet() {
-		localVarQueryParams.Add("q", parameterToString(localVarOptionals.Q.Value(), ""))
-	}
-	if localVarOptionals != nil && localVarOptionals.Sort.IsSet() {
-		localVarQueryParams.Add("sort", parameterToString(localVarOptionals.Sort.Value(), ""))
-	}
+	localVarQueryParams.Add("q", parameterToString(q, ""))
+	localVarQueryParams.Add("sort", parameterToString(sort, ""))
 	// to determine the Content-Type header
 	localVarHttpContentTypes := []string{"application/json"}
 
@@ -1369,19 +1338,12 @@ Returns an object for each repository permission of a given repository.  If the 
  * @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param username This can either be the username or the UUID of the account, surrounded by curly-braces, for example: &#x60;{account UUID}&#x60;. An account is either a team or user. 
  * @param repoSlug This can either be the repository slug or the UUID of the repository, surrounded by curly-braces, for example: &#x60;{repository UUID}&#x60;. 
- * @param optional nil or *TeamsUsernamePermissionsRepositoriesRepoSlugGetOpts - Optional Parameters:
-     * @param "Q" (optional.String) -   Query string to narrow down the response as per [filtering and sorting](../../../../meta/filtering).
-     * @param "Sort" (optional.String) -   Name of a response property sort the result by as per [filtering and sorting](../../../../meta/filtering#query-sort). 
+ * @param q  Query string to narrow down the response as per [filtering and sorting](../../../../meta/filtering).
+ * @param sort  Name of a response property sort the result by as per [filtering and sorting](../../../../meta/filtering#query-sort). 
 
 @return PaginatedRepositoryPermissions
 */
-
-type TeamsUsernamePermissionsRepositoriesRepoSlugGetOpts struct { 
-	Q optional.String
-	Sort optional.String
-}
-
-func (a *DefaultApiService) TeamsUsernamePermissionsRepositoriesRepoSlugGet(ctx context.Context, username string, repoSlug string, localVarOptionals *TeamsUsernamePermissionsRepositoriesRepoSlugGetOpts) (PaginatedRepositoryPermissions, *http.Response, error) {
+func (a *DefaultApiService) TeamsUsernamePermissionsRepositoriesRepoSlugGet(ctx context.Context, username string, repoSlug string, q string, sort string) (PaginatedRepositoryPermissions, *http.Response, error) {
 	var (
 		localVarHttpMethod = strings.ToUpper("Get")
 		localVarPostBody   interface{}
@@ -1399,12 +1361,8 @@ func (a *DefaultApiService) TeamsUsernamePermissionsRepositoriesRepoSlugGet(ctx 
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
-	if localVarOptionals != nil && localVarOptionals.Q.IsSet() {
-		localVarQueryParams.Add("q", parameterToString(localVarOptionals.Q.Value(), ""))
-	}
-	if localVarOptionals != nil && localVarOptionals.Sort.IsSet() {
-		localVarQueryParams.Add("sort", parameterToString(localVarOptionals.Sort.Value(), ""))
-	}
+	localVarQueryParams.Add("q", parameterToString(q, ""))
+	localVarQueryParams.Add("sort", parameterToString(sort, ""))
 	// to determine the Content-Type header
 	localVarHttpContentTypes := []string{"application/json"}
 
@@ -1497,19 +1455,12 @@ func (a *DefaultApiService) TeamsUsernamePermissionsRepositoriesRepoSlugGet(ctx 
 DefaultApiService
 Returns an object for each team the caller is a member of, and their effective role — the highest level of privilege the caller has. If a user is a member of multiple groups with distinct roles, only the highest level is returned.  Permissions can be:  * &#x60;admin&#x60; * &#x60;collaborator&#x60;  Example:  &#x60;&#x60;&#x60; $ curl https://api.bitbucket.org/2.0/user/permissions/teams  {   \&quot;pagelen\&quot;: 10,   \&quot;values\&quot;: [     {       \&quot;permission\&quot;: \&quot;admin\&quot;,       \&quot;type\&quot;: \&quot;team_permission\&quot;,       \&quot;user\&quot;: {         \&quot;type\&quot;: \&quot;user\&quot;,         \&quot;username\&quot;: \&quot;evzijst\&quot;,         \&quot;nickname\&quot;: \&quot;evzijst\&quot;,         \&quot;display_name\&quot;: \&quot;Erik van Zijst\&quot;,         \&quot;uuid\&quot;: \&quot;{d301aafa-d676-4ee0-88be-962be7417567}\&quot;       },       \&quot;team\&quot;: {         \&quot;username\&quot;: \&quot;bitbucket\&quot;,         \&quot;display_name\&quot;: \&quot;Atlassian Bitbucket\&quot;,         \&quot;uuid\&quot;: \&quot;{4cc6108a-a241-4db0-96a5-64347ac04f87}\&quot;       }     }   ],   \&quot;page\&quot;: 1,   \&quot;size\&quot;: 1 } &#x60;&#x60;&#x60;  Results may be further [filtered or sorted](../../../meta/filtering) by team or permission by adding the following query string parameters:  * &#x60;q&#x3D;team.username&#x3D;\&quot;bitbucket\&quot;&#x60; or &#x60;q&#x3D;permission&#x3D;\&quot;admin\&quot;&#x60; * &#x60;sort&#x3D;team.display_name&#x60;  Note that the query parameter values need to be URL escaped so that &#x60;&#x3D;&#x60; would become &#x60;%3D&#x60;.
  * @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- * @param optional nil or *UserPermissionsTeamsGetOpts - Optional Parameters:
-     * @param "Q" (optional.String) -   Query string to narrow down the response as per [filtering and sorting](../../../meta/filtering).
-     * @param "Sort" (optional.String) -   Name of a response property sort the result by as per [filtering and sorting](../../../meta/filtering#query-sort). 
+ * @param q  Query string to narrow down the response as per [filtering and sorting](../../../meta/filtering).
+ * @param sort  Name of a response property sort the result by as per [filtering and sorting](../../../meta/filtering#query-sort). 
 
 @return PaginatedTeamPermissions
 */
-
-type UserPermissionsTeamsGetOpts struct { 
-	Q optional.String
-	Sort optional.String
-}
-
-func (a *DefaultApiService) UserPermissionsTeamsGet(ctx context.Context, localVarOptionals *UserPermissionsTeamsGetOpts) (PaginatedTeamPermissions, *http.Response, error) {
+func (a *DefaultApiService) UserPermissionsTeamsGet(ctx context.Context, q string, sort string) (PaginatedTeamPermissions, *http.Response, error) {
 	var (
 		localVarHttpMethod = strings.ToUpper("Get")
 		localVarPostBody   interface{}
@@ -1525,12 +1476,8 @@ func (a *DefaultApiService) UserPermissionsTeamsGet(ctx context.Context, localVa
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
-	if localVarOptionals != nil && localVarOptionals.Q.IsSet() {
-		localVarQueryParams.Add("q", parameterToString(localVarOptionals.Q.Value(), ""))
-	}
-	if localVarOptionals != nil && localVarOptionals.Sort.IsSet() {
-		localVarQueryParams.Add("sort", parameterToString(localVarOptionals.Sort.Value(), ""))
-	}
+	localVarQueryParams.Add("q", parameterToString(q, ""))
+	localVarQueryParams.Add("sort", parameterToString(sort, ""))
 	// to determine the Content-Type header
 	localVarHttpContentTypes := []string{"application/json"}
 
