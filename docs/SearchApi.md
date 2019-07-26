@@ -1,0 +1,86 @@
+# \SearchApi
+
+All URIs are relative to *https://api.bitbucket.org/2.0*
+
+Method | HTTP request | Description
+------------- | ------------- | -------------
+[**SearchAccount**](SearchApi.md#SearchAccount) | **Get** /teams/{username}/search/code | Search for code in the repositories of the specified team
+[**SearchAccount_0**](SearchApi.md#SearchAccount_0) | **Get** /users/{username}/search/code | Search for code in the repositories of the specified user
+
+
+# **SearchAccount**
+> SearchResultPage SearchAccount(ctx, username, searchQuery, optional)
+Search for code in the repositories of the specified team
+
+### Required Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+  **username** | **string**| The account to search in; either the username or the UUID in curly braces | 
+  **searchQuery** | **string**| The search query | 
+ **optional** | ***SearchAccountOpts** | optional parameters | nil if no parameters
+
+### Optional Parameters
+Optional parameters are passed through a pointer to a SearchAccountOpts struct
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+
+ **page** | **optional.Int32**| Which page of the search results to retrieve | [default to 1]
+ **pagelen** | **optional.Int32**| How many search results to retrieve per page | [default to 10]
+
+### Return type
+
+[**SearchResultPage**](search_result_page.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **SearchAccount_0**
+> SearchResultPage SearchAccount_0(ctx, username, searchQuery, optional)
+Search for code in the repositories of the specified user
+
+### Required Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+  **username** | **string**| The account to search in; either the username or the UUID in curly braces | 
+  **searchQuery** | **string**| The search query | 
+ **optional** | ***SearchAccount_1Opts** | optional parameters | nil if no parameters
+
+### Optional Parameters
+Optional parameters are passed through a pointer to a SearchAccount_1Opts struct
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+
+ **page** | **optional.Int32**| Which page of the search results to retrieve | [default to 1]
+ **pagelen** | **optional.Int32**| How many search results to retrieve per page | [default to 10]
+
+### Return type
+
+[**SearchResultPage**](search_result_page.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
