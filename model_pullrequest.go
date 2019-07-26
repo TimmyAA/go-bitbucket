@@ -22,7 +22,7 @@ type Pullrequest struct {
 	// Title of the pull request.
 	Title string `json:"title,omitempty"`
 	Rendered *PullrequestRendered `json:"rendered,omitempty"`
-	Summary *PullrequestRenderedTitle `json:"summary,omitempty"`
+	Summary *IssueContent `json:"summary,omitempty"`
 	// The pull request's current status.
 	State string `json:"state,omitempty"`
 	Author *Account `json:"author,omitempty"`

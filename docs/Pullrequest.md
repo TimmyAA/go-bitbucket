@@ -8,7 +8,7 @@ Name | Type | Description | Notes
 **Id** | **int32** | The pull request&#39;s unique ID. Note that pull request IDs are only unique within their associated repository. | [optional] [default to null]
 **Title** | **string** | Title of the pull request. | [optional] [default to null]
 **Rendered** | [***PullrequestRendered**](pullrequest_rendered.md) |  | [optional] [default to null]
-**Summary** | [***PullrequestRenderedTitle**](pullrequest_rendered_title.md) |  | [optional] [default to null]
+**Summary** | [***IssueContent**](issue_content.md) |  | [optional] [default to null]
 **State** | **string** | The pull request&#39;s current status. | [optional] [default to null]
 **Author** | [***Account**](account.md) |  | [optional] [default to null]
 **Source** | [***PullrequestEndpoint**](pullrequest_endpoint.md) |  | [optional] [default to null]

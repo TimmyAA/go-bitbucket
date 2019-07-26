@@ -387,17 +387,11 @@ Used to update the current status of a build status object on the specific commi
  * @param node The commit&#39;s SHA1.
  * @param key The build status&#39; unique key
  * @param repoSlug This can either be the repository slug or the UUID of the repository, surrounded by curly-braces, for example: &#x60;{repository UUID}&#x60;. 
- * @param optional nil or *RepositoriesUsernameRepoSlugCommitNodeStatusesBuildKeyPutOpts - Optional Parameters:
-     * @param "Body" (optional.Interface of Commitstatus) -  The updated build status object
+ * @param body The updated build status object
 
 @return Commitstatus
 */
-
-type RepositoriesUsernameRepoSlugCommitNodeStatusesBuildKeyPutOpts struct { 
-	Body optional.Interface
-}
-
-func (a *RepositoriesApiService) RepositoriesUsernameRepoSlugCommitNodeStatusesBuildKeyPut(ctx context.Context, username string, node string, key string, repoSlug string, localVarOptionals *RepositoriesUsernameRepoSlugCommitNodeStatusesBuildKeyPutOpts) (Commitstatus, *http.Response, error) {
+func (a *RepositoriesApiService) RepositoriesUsernameRepoSlugCommitNodeStatusesBuildKeyPut(ctx context.Context, username string, node string, key string, repoSlug string, body Commitstatus) (Commitstatus, *http.Response, error) {
 	var (
 		localVarHttpMethod = strings.ToUpper("Put")
 		localVarPostBody   interface{}
@@ -435,14 +429,7 @@ func (a *RepositoriesApiService) RepositoriesUsernameRepoSlugCommitNodeStatusesB
 		localVarHeaderParams["Accept"] = localVarHttpHeaderAccept
 	}
 	// body params
-	if localVarOptionals != nil && localVarOptionals.Body.IsSet() {
-		
-		localVarOptionalBody, localVarOptionalBodyok := localVarOptionals.Body.Value().(Commitstatus)
-		if !localVarOptionalBodyok {
-				return localVarReturnValue, nil, reportError("body should be Commitstatus")
-		}
-		localVarPostBody = &localVarOptionalBody
-	}
+	localVarPostBody = &body
 	if ctx != nil {
 		// API Key Authentication
 		if auth, ok := ctx.Value(ContextAPIKey).(APIKey); ok {
