@@ -134,7 +134,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **RepositoriesUsernameRepoSlugCommitNodeStatusesBuildKeyPut**
-> Commitstatus RepositoriesUsernameRepoSlugCommitNodeStatusesBuildKeyPut(ctx, username, node, key, repoSlug, optional)
+> Commitstatus RepositoriesUsernameRepoSlugCommitNodeStatusesBuildKeyPut(ctx, username, node, key, repoSlug, body)
 
 
 Used to update the current status of a build status object on the specific commit.  This operation can also be used to change other properties of the build status:  * `state` * `name` * `description` * `url` * `refname`  The `key` cannot be changed.
@@ -148,18 +148,7 @@ Name | Type | Description  | Notes
   **node** | **string**| The commit&#39;s SHA1. | 
   **key** | **string**| The build status&#39; unique key | 
   **repoSlug** | **string**| This can either be the repository slug or the UUID of the repository, surrounded by curly-braces, for example: &#x60;{repository UUID}&#x60;.  | 
- **optional** | ***RepositoriesUsernameRepoSlugCommitNodeStatusesBuildKeyPutOpts** | optional parameters | nil if no parameters
-
-### Optional Parameters
-Optional parameters are passed through a pointer to a RepositoriesUsernameRepoSlugCommitNodeStatusesBuildKeyPutOpts struct
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
-
-
-
-
- **body** | [**optional.Interface of Commitstatus**](Commitstatus.md)| The updated build status object | 
+  **body** | [**Commitstatus**](Commitstatus.md)| The updated build status object | 
 
 ### Return type
 

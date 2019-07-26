@@ -23,5 +23,5 @@ type IssueChange struct {
 	User *User `json:"user,omitempty"`
 	Issue *Issue `json:"issue,omitempty"`
 	Changes *IssueChangeChanges `json:"changes,omitempty"`
-	Message *PullrequestRenderedTitle `json:"message,omitempty"`
+	Message *IssueContent `json:"message,omitempty"`
 }

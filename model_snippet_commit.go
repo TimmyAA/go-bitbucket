@@ -20,7 +20,7 @@ type SnippetCommit struct {
 	Date time.Time `json:"date,omitempty"`
 	Author *Author `json:"author,omitempty"`
 	Message string `json:"message,omitempty"`
-	Summary *PullrequestRenderedTitle `json:"summary,omitempty"`
+	Summary *IssueContent `json:"summary,omitempty"`
 	Parents []BaseCommit `json:"parents,omitempty"`
 	Links *SnippetCommitLinks `json:"links,omitempty"`
 	Snippet *Snippet `json:"snippet,omitempty"`

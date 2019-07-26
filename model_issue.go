@@ -32,5 +32,5 @@ type Issue struct {
 	Version *Version `json:"version,omitempty"`
 	Component *Component `json:"component,omitempty"`
 	Votes int32 `json:"votes,omitempty"`
-	Content *PullrequestRenderedTitle `json:"content,omitempty"`
+	Content *IssueContent `json:"content,omitempty"`
 }

@@ -2843,7 +2843,7 @@ paths:
       - in: "body"
         name: "_body"
         description: "The updated build status object"
-        required: false
+        required: true
         schema:
           $ref: "#/definitions/commitstatus"
         x-exportParamName: "Body"
@@ -13515,35 +13515,69 @@ definitions:
         commit:
           $ref: "#/definitions/commit"
       description: "A commit comment."
-  ref:
-    type: "object"
-    required:
-    - "type"
-    properties:
-      type:
-        type: "string"
-      links:
-        $ref: "#/definitions/ref_links"
-      name:
-        type: "string"
-        description: "The name of the ref."
-      target:
-        $ref: "#/definitions/commit"
-    description: "A ref object, representing a branch or tag in a repository."
-    example:
-      name: "name"
-      target: ""
-      links:
-        html:
-          name: "name"
-          href: "http://example.com/aeiou"
-        commits:
-          name: "name"
-          href: "http://example.com/aeiou"
-        self:
-          name: "name"
-          href: "http://example.com/aeiou"
-      type: "type"
+  issue:
+    allOf:
+    - $ref: "#/definitions/object"
+    - type: "object"
+      properties:
+        links:
+          $ref: "#/definitions/issue_links"
+        id:
+          type: "integer"
+        repository:
+          $ref: "#/definitions/repository"
+        title:
+          type: "string"
+        reporter:
+          $ref: "#/definitions/user"
+        assignee:
+          $ref: "#/definitions/user"
+        created_on:
+          type: "string"
+          format: "date-time"
+        updated_on:
+          type: "string"
+          format: "date-time"
+        edited_on:
+          type: "string"
+          format: "date-time"
+        state:
+          type: "string"
+          enum:
+          - "new"
+          - "open"
+          - "resolved"
+          - "on hold"
+          - "invalid"
+          - "duplicate"
+          - "wontfix"
+          - "closed"
+        kind:
+          type: "string"
+          enum:
+          - "bug"
+          - "enhancement"
+          - "proposal"
+          - "task"
+        priority:
+          type: "string"
+          enum:
+          - "trivial"
+          - "minor"
+          - "major"
+          - "critical"
+          - "blocker"
+        milestone:
+          $ref: "#/definitions/milestone"
+        version:
+          $ref: "#/definitions/version"
+        component:
+          $ref: "#/definitions/component"
+        votes:
+          type: "integer"
+        content:
+          $ref: "#/definitions/issue_content"
+      description: "An issue."
   deployment_state_completed_status_failed:
     allOf:
     - $ref: "#/definitions/deployment_state_completed_status"
@@ -13572,7 +13606,7 @@ definitions:
         rendered:
           $ref: "#/definitions/pullrequest_rendered"
         summary:
-          $ref: "#/definitions/pullrequest_rendered_title"
+          $ref: "#/definitions/issue_content"
         state:
           type: "string"
           description: "The pull request's current status."
@@ -14345,69 +14379,35 @@ definitions:
       page: 1
       next: "http://example.com/aeiou"
       size: 0
-  issue:
-    allOf:
-    - $ref: "#/definitions/object"
-    - type: "object"
-      properties:
-        links:
-          $ref: "#/definitions/issue_links"
-        id:
-          type: "integer"
-        repository:
-          $ref: "#/definitions/repository"
-        title:
-          type: "string"
-        reporter:
-          $ref: "#/definitions/user"
-        assignee:
-          $ref: "#/definitions/user"
-        created_on:
-          type: "string"
-          format: "date-time"
-        updated_on:
-          type: "string"
-          format: "date-time"
-        edited_on:
-          type: "string"
-          format: "date-time"
-        state:
-          type: "string"
-          enum:
-          - "new"
-          - "open"
-          - "resolved"
-          - "on hold"
-          - "invalid"
-          - "duplicate"
-          - "wontfix"
-          - "closed"
-        kind:
-          type: "string"
-          enum:
-          - "bug"
-          - "enhancement"
-          - "proposal"
-          - "task"
-        priority:
-          type: "string"
-          enum:
-          - "trivial"
-          - "minor"
-          - "major"
-          - "critical"
-          - "blocker"
-        milestone:
-          $ref: "#/definitions/milestone"
-        version:
-          $ref: "#/definitions/version"
-        component:
-          $ref: "#/definitions/component"
-        votes:
-          type: "integer"
-        content:
-          $ref: "#/definitions/pullrequest_rendered_title"
-      description: "An issue."
+  ref:
+    type: "object"
+    required:
+    - "type"
+    properties:
+      type:
+        type: "string"
+      links:
+        $ref: "#/definitions/ref_links"
+      name:
+        type: "string"
+        description: "The name of the ref."
+      target:
+        $ref: "#/definitions/commit"
+    description: "A ref object, representing a branch or tag in a repository."
+    example:
+      name: "name"
+      target: ""
+      links:
+        html:
+          name: "name"
+          href: "http://example.com/aeiou"
+        commits:
+          name: "name"
+          href: "http://example.com/aeiou"
+        self:
+          name: "name"
+          href: "http://example.com/aeiou"
+      type: "type"
   webhook_subscription:
     allOf:
     - $ref: "#/definitions/object"
@@ -14638,7 +14638,7 @@ definitions:
         message:
           type: "string"
         summary:
-          $ref: "#/definitions/pullrequest_rendered_title"
+          $ref: "#/definitions/issue_content"
         parents:
           type: "array"
           items:
@@ -14666,7 +14666,7 @@ definitions:
       changes:
         $ref: "#/definitions/issue_change_changes"
       message:
-        $ref: "#/definitions/pullrequest_rendered_title"
+        $ref: "#/definitions/issue_content"
     description: "An issue change."
     example:
       message:
@@ -15112,7 +15112,7 @@ definitions:
           type: "string"
           format: "date-time"
         content:
-          $ref: "#/definitions/pullrequest_rendered_title"
+          $ref: "#/definitions/issue_content"
         user:
           $ref: "#/definitions/user"
         deleted:
@@ -16536,18 +16536,57 @@ definitions:
     - $ref: "#/definitions/object"
     - type: "object"
       description: "The representation of the progress state of a pipeline step."
-  author:
-    allOf:
-    - $ref: "#/definitions/object"
-    - type: "object"
-      properties:
-        raw:
-          type: "string"
-          description: "The raw author value from the repository. This may be the\
-            \ only value available if the author does not match a user in Bitbucket."
-        user:
-          $ref: "#/definitions/account"
-      description: "The author of a change in a repository"
+  paginated_users:
+    type: "object"
+    properties:
+      size:
+        type: "integer"
+        description: "Total number of objects in the response. This is an optional\
+          \ element that is not provided in all responses, as it can be expensive\
+          \ to compute."
+        minimum: 0
+      page:
+        type: "integer"
+        description: "Page number of the current results. This is an optional element\
+          \ that is not provided in all responses."
+        minimum: 1
+      pagelen:
+        type: "integer"
+        description: "Current number of objects on the existing page. The default\
+          \ value is 10 with 100 being the maximum allowed value. Individual APIs\
+          \ may enforce different values."
+        minimum: 1
+      next:
+        type: "string"
+        format: "uri"
+        description: "Link to the next page if it exists. The last page of a collection\
+          \ does not have this value. Use this link to navigate the result set and\
+          \ refrain from constructing your own URLs."
+      previous:
+        type: "string"
+        format: "uri"
+        description: "Link to previous page if it exists. A collections first page\
+          \ does not have this value. This is an optional element that is not provided\
+          \ in all responses. Some result sets strictly support forward navigation\
+          \ and never provide previous links. Clients must anticipate that backwards\
+          \ navigation is not always available. Use this link to navigate the result\
+          \ set and refrain from constructing your own URLs."
+      values:
+        type: "array"
+        uniqueItems: true
+        items:
+          $ref: "#/definitions/user"
+        minItems: 0
+    description: "A paginated list of users."
+    example:
+      values:
+      - ""
+      - ""
+      previous: "http://example.com/aeiou"
+      pagelen: 1
+      page: 1
+      next: "http://example.com/aeiou"
+      size: 0
   commit_file:
     type: "object"
     required:
@@ -16842,57 +16881,18 @@ definitions:
           enum:
           - "NOT_RUN"
       description: "A Bitbucket Pipelines NOT_RUN pipeline step result."
-  paginated_users:
-    type: "object"
-    properties:
-      size:
-        type: "integer"
-        description: "Total number of objects in the response. This is an optional\
-          \ element that is not provided in all responses, as it can be expensive\
-          \ to compute."
-        minimum: 0
-      page:
-        type: "integer"
-        description: "Page number of the current results. This is an optional element\
-          \ that is not provided in all responses."
-        minimum: 1
-      pagelen:
-        type: "integer"
-        description: "Current number of objects on the existing page. The default\
-          \ value is 10 with 100 being the maximum allowed value. Individual APIs\
-          \ may enforce different values."
-        minimum: 1
-      next:
-        type: "string"
-        format: "uri"
-        description: "Link to the next page if it exists. The last page of a collection\
-          \ does not have this value. Use this link to navigate the result set and\
-          \ refrain from constructing your own URLs."
-      previous:
-        type: "string"
-        format: "uri"
-        description: "Link to previous page if it exists. A collections first page\
-          \ does not have this value. This is an optional element that is not provided\
-          \ in all responses. Some result sets strictly support forward navigation\
-          \ and never provide previous links. Clients must anticipate that backwards\
-          \ navigation is not always available. Use this link to navigate the result\
-          \ set and refrain from constructing your own URLs."
-      values:
-        type: "array"
-        uniqueItems: true
-        items:
-          $ref: "#/definitions/user"
-        minItems: 0
-    description: "A paginated list of users."
-    example:
-      values:
-      - ""
-      - ""
-      previous: "http://example.com/aeiou"
-      pagelen: 1
-      page: 1
-      next: "http://example.com/aeiou"
-      size: 0
+  author:
+    allOf:
+    - $ref: "#/definitions/object"
+    - type: "object"
+      properties:
+        raw:
+          type: "string"
+          description: "The raw author value from the repository. This may be the\
+            \ only value available if the author does not match a user in Bitbucket."
+        user:
+          $ref: "#/definitions/account"
+      description: "The author of a change in a repository"
   paginated_pipeline_known_hosts:
     type: "object"
     properties:
@@ -17063,24 +17063,40 @@ definitions:
     properties:
       self:
         $ref: "#/definitions/subject_types_repository_events"
-  ref_links:
+  issue_links:
     properties:
       self:
         $ref: "#/definitions/subject_types_repository_events"
-      commits:
-        $ref: "#/definitions/subject_types_repository_events"
       html:
         $ref: "#/definitions/subject_types_repository_events"
+      comments:
+        $ref: "#/definitions/subject_types_repository_events"
+      attachments:
+        $ref: "#/definitions/subject_types_repository_events"
+      watch:
+        $ref: "#/definitions/subject_types_repository_events"
+      vote:
+        $ref: "#/definitions/subject_types_repository_events"
+  issue_content:
+    properties:
+      raw:
+        type: "string"
+        description: "The text as it was typed by a user."
+      markup:
+        type: "string"
+        description: "The type of markup language the raw content is to be interpreted\
+          \ in."
+        enum:
+        - "markdown"
+        - "creole"
+        - "plaintext"
+      html:
+        type: "string"
+        description: "The user's content rendered as HTML."
     example:
-      html:
-        name: "name"
-        href: "http://example.com/aeiou"
-      commits:
-        name: "name"
-        href: "http://example.com/aeiou"
-      self:
-        name: "name"
-        href: "http://example.com/aeiou"
+      raw: "raw"
+      markup: "markdown"
+      html: "html"
   pullrequest_links:
     properties:
       self:
@@ -17103,34 +17119,14 @@ definitions:
         $ref: "#/definitions/subject_types_repository_events"
       decline:
         $ref: "#/definitions/subject_types_repository_events"
-  pullrequest_rendered_title:
-    properties:
-      raw:
-        type: "string"
-        description: "The text as it was typed by a user."
-      markup:
-        type: "string"
-        description: "The type of markup language the raw content is to be interpreted\
-          \ in."
-        enum:
-        - "markdown"
-        - "creole"
-        - "plaintext"
-      html:
-        type: "string"
-        description: "The user's content rendered as HTML."
-    example:
-      raw: "raw"
-      markup: "markdown"
-      html: "html"
   pullrequest_rendered:
     properties:
       title:
-        $ref: "#/definitions/pullrequest_rendered_title"
+        $ref: "#/definitions/issue_content"
       description:
-        $ref: "#/definitions/pullrequest_rendered_title"
+        $ref: "#/definitions/issue_content"
       reason:
-        $ref: "#/definitions/pullrequest_rendered_title"
+        $ref: "#/definitions/issue_content"
   pullrequest_merge_commit:
     properties:
       hash:
@@ -17203,20 +17199,24 @@ definitions:
       enabled:
         type: "boolean"
         description: "Indicates if branch is enabled or not."
-  issue_links:
+  ref_links:
     properties:
       self:
         $ref: "#/definitions/subject_types_repository_events"
+      commits:
+        $ref: "#/definitions/subject_types_repository_events"
       html:
         $ref: "#/definitions/subject_types_repository_events"
-      comments:
-        $ref: "#/definitions/subject_types_repository_events"
-      attachments:
-        $ref: "#/definitions/subject_types_repository_events"
-      watch:
-        $ref: "#/definitions/subject_types_repository_events"
-      vote:
-        $ref: "#/definitions/subject_types_repository_events"
+    example:
+      html:
+        name: "name"
+        href: "http://example.com/aeiou"
+      commits:
+        name: "name"
+        href: "http://example.com/aeiou"
+      self:
+        name: "name"
+        href: "http://example.com/aeiou"
   repository_links:
     properties:
       self:
